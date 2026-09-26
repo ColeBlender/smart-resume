@@ -1,8 +1,12 @@
+import { ClipboardCheck, FileSearch, ShieldCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 import { GoogleButton } from "@/components/google-button";
 import { Header } from "@/components/header";
-import { createClient } from "@/lib/supabase/server";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROLE_PACKS } from "@/lib/role-packs";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Home({ searchParams }: PageProps<"/">) {
   const supabase = await createClient();
@@ -14,36 +18,74 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const { error } = await searchParams;
   const postings = ROLE_PACKS.reduce((n, p) => n + p.postings_sampled, 0);
 
+  const steps = [
+    {
+      icon: ClipboardCheck,
+      title: "Confirm your skills",
+      body: `Pick a role and answer yes, some, or no to the skills ${postings} real job postings ask for.`,
+    },
+    {
+      icon: FileSearch,
+      title: "Paste a job",
+      body: "See which skills it wants, your weighted coverage, and your gaps, live as you paste.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Get an honest resume",
+      body: "Claude rewrites it for the role, a screener scores it, and the honesty guard strips anything unbacked.",
+    },
+  ];
+
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-16">
-        <p className="text-sm font-medium uppercase tracking-widest text-accent">For software engineers</p>
-        <h1 className="mt-3 max-w-3xl font-serif text-4xl leading-tight font-semibold sm:text-5xl">
-          Tailor your resume to any job. Never invent a skill.
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg text-muted">
-          Confirm what you actually know once. Paste a job description. Get a resume rewritten for that
-          role, a match score, and the exact gaps. The honesty guard strips any skill you never confirmed.
-        </p>
-        <div className="mt-8">
-          <GoogleButton />
-          {error && <p className="mt-3 text-sm text-bad">Sign-in failed. Please try again.</p>}
-        </div>
-
-        <div className="mt-16 grid gap-4 sm:grid-cols-3">
-          {[
-            ["1. Confirm your skills", `Pick your role. Answer yes, some, or no to the skills real postings ask for (${postings} postings analyzed).`],
-            ["2. Paste a job", "We detect the skills it wants, score your coverage, and show what you're missing."],
-            ["3. Get an honest resume", "Claude rewrites it for the job, a screener scores it, and the guard removes anything unbacked."],
-          ].map(([title, body]) => (
-            <div key={title} className="rounded-lg border border-line bg-card p-5">
-              <h2 className="font-semibold">{title}</h2>
-              <p className="mt-2 text-sm text-muted">{body}</p>
+      <main className="flex-1">
+        <section className="relative overflow-hidden border-b">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-accent),transparent_60%)]" />
+          <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 py-24 text-center">
+            <Badge variant="secondary" className="mb-6">
+              Built for software engineers
+            </Badge>
+            <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-balance sm:text-6xl">
+              Tailor your resume to any job.{" "}
+              <span className="text-brand">Never invent a skill.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg text-balance text-muted-foreground">
+              Confirm what you actually know once. Every tailored resume is fenced to that list, and you see
+              your match score and exact gaps before you apply.
+            </p>
+            <div className="mt-10">
+              <GoogleButton />
             </div>
+            {error && (
+              <Alert variant="destructive" className="mt-6 max-w-sm">
+                <AlertDescription>Sign-in failed. Please try again.</AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </section>
+
+        <section className="mx-auto grid max-w-6xl gap-4 px-4 py-16 md:grid-cols-3">
+          {steps.map(({ icon: Icon, title, body }, i) => (
+            <Card key={title}>
+              <CardHeader>
+                <div className="mb-2 flex size-9 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                  <Icon className="size-5" />
+                </div>
+                <CardTitle>
+                  {i + 1}. {title}
+                </CardTitle>
+                <CardDescription>{body}</CardDescription>
+              </CardHeader>
+            </Card>
           ))}
-        </div>
+        </section>
       </main>
+      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+        <a href="/privacy" className="hover:text-foreground">
+          Privacy
+        </a>
+      </footer>
     </>
   );
 }

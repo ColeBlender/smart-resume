@@ -1,6 +1,8 @@
 "use client";
 
+import { Check, Copy, Download, Printer } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function CopyButtons({ markdown, filename }: { markdown: string; filename: string }) {
   const [copied, setCopied] = useState(false);
@@ -21,16 +23,16 @@ export function CopyButtons({ markdown, filename }: { markdown: string; filename
   }
 
   return (
-    <div className="flex gap-2">
-      <button onClick={copy} className="flex-1 rounded-md border border-line bg-card px-4 py-2 text-sm hover:border-ink">
-        {copied ? "Copied" : "Copy Markdown"}
-      </button>
-      <button onClick={download} className="flex-1 rounded-md border border-line bg-card px-4 py-2 text-sm hover:border-ink">
-        Download .md
-      </button>
-      <button onClick={() => window.print()} className="flex-1 rounded-md border border-line bg-card px-4 py-2 text-sm hover:border-ink">
-        Print / PDF
-      </button>
+    <div className="grid grid-cols-3 gap-2">
+      <Button variant="outline" onClick={copy}>
+        {copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy"}
+      </Button>
+      <Button variant="outline" onClick={download}>
+        <Download /> .md
+      </Button>
+      <Button variant="outline" onClick={() => window.print()}>
+        <Printer /> PDF
+      </Button>
     </div>
   );
 }

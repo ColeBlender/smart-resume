@@ -16,10 +16,10 @@ export default async function OnboardPage() {
 
   return (
     <>
-      <Header email={user.email} />
+      <Header user={user} />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
-        <h1 className="font-serif text-3xl font-semibold">{profile ? "Your skills" : "Set up your profile"}</h1>
-        <p className="mt-2 text-muted">
+        <h1 className="text-3xl font-bold tracking-tight">{profile ? "Your skills" : "Set up your profile"}</h1>
+        <p className="mt-2 text-muted-foreground">
           Be honest: this list is the fence. Tailored resumes can only claim what you confirm here or already
           wrote in your resume.
         </p>

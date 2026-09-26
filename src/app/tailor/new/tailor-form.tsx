@@ -1,6 +1,15 @@
 "use client";
 
+import { Loader2, Sparkles } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { SkillChips } from "@/components/skill-chips";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 import type { RolePack } from "@/lib/role-packs";
 import { matchJd, type Answers } from "@/lib/scoring";
 import { runTailoring } from "./actions";
@@ -11,7 +20,6 @@ export function TailorForm({ pack, answers }: { pack: RolePack; answers: Answers
   const [jd, setJd] = useState("");
   const [company, setCompany] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
-  const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
   const [step, setStep] = useState(0);
 
@@ -22,87 +30,85 @@ export function TailorForm({ pack, answers }: { pack: RolePack; answers: Answers
 
   useEffect(() => {
     if (!pending) return;
-    const t = setInterval(() => setStep((s) => Math.min(s + 1, STEPS.length - 1)), 25000);
+    const t = setInterval(() => setStep((s) => Math.min(s + 1, STEPS.length - 1)), 8000);
     return () => clearInterval(t);
   }, [pending]);
 
   function submit() {
-    setError(undefined);
     setStep(0);
     startTransition(async () => {
       const result = await runTailoring({ jd, company, roleTitle });
-      if (result?.error) setError(result.error);
+      if (result?.error) toast.error(result.error);
     });
   }
 
   return (
-    <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
-      <div className="space-y-3">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <input
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            placeholder="Company (optional)"
-            className="rounded-lg border border-line bg-card px-4 py-2 text-sm outline-none focus:border-ink"
-          />
-          <input
-            value={roleTitle}
-            onChange={(e) => setRoleTitle(e.target.value)}
-            placeholder="Role title (optional)"
-            className="rounded-lg border border-line bg-card px-4 py-2 text-sm outline-none focus:border-ink"
-          />
-        </div>
-        <textarea
-          value={jd}
-          onChange={(e) => setJd(e.target.value)}
-          rows={20}
-          placeholder="Paste the full job description here…"
-          className="w-full rounded-lg border border-line bg-card p-4 text-sm outline-none focus:border-ink"
-        />
-        <div className="flex items-center gap-4">
-          <button
-            onClick={submit}
-            disabled={pending || jd.trim().length < 200}
-            className="rounded-md bg-ink px-5 py-3 text-sm font-medium text-paper hover:opacity-90 disabled:opacity-50"
-          >
-            {pending ? "Working…" : "Tailor my resume"}
-          </button>
-          {pending && <span className="text-sm text-muted">{STEPS[step]}… (usually under a minute)</span>}
-          {error && <span className="text-sm text-bad">{error}</span>}
-        </div>
-      </div>
+    <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_340px]">
+      <Card>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="company">Company</Label>
+              <Input id="company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Optional" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Role title</Label>
+              <Input id="role" value={roleTitle} onChange={(e) => setRoleTitle(e.target.value)} placeholder="Optional" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="jd">Job description</Label>
+            <Textarea
+              id="jd"
+              value={jd}
+              onChange={(e) => setJd(e.target.value)}
+              rows={18}
+              placeholder="Paste the full job description here…"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button size="lg" onClick={submit} disabled={pending || jd.trim().length < 200}>
+              {pending ? <Loader2 className="animate-spin" /> : <Sparkles />}
+              {pending ? "Working…" : "Tailor my resume"}
+            </Button>
+            {pending && <span className="text-sm text-muted-foreground">{STEPS[step]}… usually under a minute</span>}
+            {!pending && jd.trim().length > 0 && jd.trim().length < 200 && (
+              <span className="text-sm text-muted-foreground">Paste the full posting (200+ characters).</span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-      <aside className="h-fit rounded-lg border border-line bg-card p-5 lg:sticky lg:top-6">
-        <div className="text-sm text-muted">Live match</div>
-        {detected === 0 ? (
-          <p className="mt-2 text-sm text-muted">
-            Skills from the {pack.title} pack will appear here as you paste.
-          </p>
-        ) : (
-          <>
-            <div className="mt-1 font-serif text-4xl font-semibold">{match.coveragePct}%</div>
-            <div className="text-sm text-muted">of the {detected} skills this job asks for</div>
-            <SkillList title="You have" skills={match.matched} tone="bg-accent-soft text-accent" />
-            <SkillList title="Gaps (won't be claimed)" skills={match.gaps} tone="bg-warn-soft text-warn" />
-          </>
-        )}
-      </aside>
-    </div>
-  );
-}
-
-function SkillList({ title, skills, tone }: { title: string; skills: RolePack["skills"]; tone: string }) {
-  if (!skills.length) return null;
-  return (
-    <div className="mt-4">
-      <div className="text-xs font-semibold uppercase tracking-widest text-muted">{title}</div>
-      <ul className="mt-2 flex flex-wrap gap-1.5">
-        {skills.map((s) => (
-          <li key={s.id} className={`rounded-full px-2.5 py-0.5 text-xs ${tone}`}>
-            {s.name}
-          </li>
-        ))}
-      </ul>
+      <Card className="h-fit lg:sticky lg:top-20">
+        <CardHeader>
+          <CardDescription>Live match · {pack.title}</CardDescription>
+          <CardTitle className="text-4xl font-bold tabular-nums">{detected ? `${match.coveragePct}%` : "–"}</CardTitle>
+          {detected > 0 && <Progress value={match.coveragePct} />}
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm">
+          {detected === 0 ? (
+            <p className="text-muted-foreground">Skills this job asks for will appear here as you paste.</p>
+          ) : (
+            <>
+              <p className="text-muted-foreground">of the {detected} skills this job asks for, weighted by demand.</p>
+              {match.matched.length > 0 && (
+                <div className="space-y-2">
+                  <div className="text-xs font-medium tracking-wider text-muted-foreground uppercase">You have</div>
+                  <SkillChips skills={match.matched} tone="match" />
+                </div>
+              )}
+              {match.gaps.length > 0 && (
+                <div className="space-y-2">
+                  <div className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
+                    Gaps (won&apos;t be claimed)
+                  </div>
+                  <SkillChips skills={match.gaps} tone="gap" />
+                </div>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
