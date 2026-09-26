@@ -1,33 +1,39 @@
+import { redirect } from "next/navigation";
 import { Header } from "@/components/header";
+import { OnboardingWizard } from "@/components/onboarding-wizard";
+import { loadSkillProfile } from "@/lib/profile";
 import { ROLE_PACKS } from "@/lib/role-packs";
-import type { Answer } from "@/lib/scoring";
 import { requireUser } from "@/lib/supabase/server";
-import { OnboardForm } from "./onboard-form";
+import { extractResume, finishOnboarding, prefillSkills } from "./actions";
 
-export default async function OnboardPage() {
+// Resume upload (PDF via Claude) and skill pre-rating can take a little while.
+export const maxDuration = 120;
+
+export default async function OnboardPage({ searchParams }: PageProps<"/onboard">) {
   const { supabase, user } = await requireUser();
+  const { redo } = await searchParams;
 
-  const [{ data: profile }, { data: answerRows }] = await Promise.all([
-    supabase.from("profiles").select("role_pack_id, base_resume").eq("user_id", user.id).maybeSingle(),
-    supabase.from("skill_answers").select("skill_id, answer").eq("user_id", user.id),
-  ]);
-
-  const answers = Object.fromEntries((answerRows ?? []).map((r) => [r.skill_id, r.answer as Answer]));
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role_pack_id, base_resume, onboarded_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (profile?.onboarded_at && !redo) redirect("/dashboard");
+  const skills = await loadSkillProfile(supabase);
 
   return (
     <>
       <Header user={user} />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
-        <h1 className="text-3xl font-bold tracking-tight">{profile ? "Your skills" : "Set up your profile"}</h1>
-        <p className="mt-2 text-muted-foreground">
-          Be honest: this list is the fence. Tailored resumes can only claim what you confirm here or already
-          wrote in your resume.
-        </p>
-        <OnboardForm
+      <main className="flex flex-1 items-start justify-center px-4 py-10 sm:items-center">
+        <OnboardingWizard
           packs={ROLE_PACKS}
-          initialPackId={profile?.role_pack_id ?? ROLE_PACKS[0].id}
-          initialResume={profile?.base_resume ?? ""}
-          initialAnswers={answers}
+          actions={{ extractResume, prefillSkills, finishOnboarding }}
+          initial={{
+            resume: profile?.base_resume ?? "",
+            packId: profile?.role_pack_id ?? undefined,
+            ratings: Object.fromEntries(Object.values(skills).map((s) => [s.key, s.rating])),
+            notes: Object.fromEntries(Object.values(skills).flatMap((s) => (s.note ? [[s.key, s.note]] : []))),
+          }}
         />
       </main>
     </>

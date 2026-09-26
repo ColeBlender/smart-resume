@@ -31,3 +31,8 @@ export const ROLE_PACKS: RolePack[] = [fullstack, frontend, backend, aiEngineer,
 export function getPack(id: string | null | undefined): RolePack | undefined {
   return ROLE_PACKS.find((p) => p.id === id);
 }
+
+/** Every skill across all packs, deduped by id (ids are shared across packs). */
+export const ALL_SKILLS: Skill[] = [
+  ...new Map(ROLE_PACKS.flatMap((p) => p.skills).map((s) => [s.id, s])).values(),
+];
