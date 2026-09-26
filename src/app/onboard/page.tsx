@@ -3,6 +3,7 @@ import { Header } from "@/components/header";
 import { OnboardingWizard } from "@/components/onboarding-wizard";
 import { loadSkillProfile } from "@/lib/profile";
 import { ROLE_PACKS } from "@/lib/role-packs";
+import type { Role } from "@/lib/scoring";
 import { requireUser } from "@/lib/supabase/server";
 import { extractResume, finishOnboarding, prefillSkills } from "./actions";
 
@@ -15,7 +16,7 @@ export default async function OnboardPage({ searchParams }: PageProps<"/onboard"
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role_pack_id, base_resume, onboarded_at")
+    .select("role_pack_id, base_resume, onboarded_at, roles")
     .eq("user_id", user.id)
     .maybeSingle();
   if (profile?.onboarded_at && !redo) redirect("/dashboard");
@@ -33,6 +34,8 @@ export default async function OnboardPage({ searchParams }: PageProps<"/onboard"
             packId: profile?.role_pack_id ?? undefined,
             ratings: Object.fromEntries(Object.values(skills).map((s) => [s.key, s.rating])),
             notes: Object.fromEntries(Object.values(skills).flatMap((s) => (s.note ? [[s.key, s.note]] : []))),
+            usedAt: Object.fromEntries(Object.values(skills).map((s) => [s.key, s.usedAt ?? []])),
+            roles: (profile?.roles as Role[] | undefined) ?? [],
           }}
         />
       </main>

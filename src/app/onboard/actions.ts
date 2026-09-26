@@ -1,13 +1,16 @@
 "use server";
 
+import { cleanUses } from "@/lib/clean-uses";
 import mammoth from "mammoth";
 import { prefillRatings, resumeFromPdf } from "@/lib/claude";
 import { getPack } from "@/lib/role-packs";
+import type { Role } from "@/lib/scoring";
 import { requireUser } from "@/lib/supabase/server";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
 export type Prefill = { key: string; rating: number | null; evidence: string | null };
+export type PrefillResult = { ratings: Prefill[]; roles: Role[] };
 
 /** Uploaded file -> resume text. PDF goes through Claude; DOCX through mammoth; text as-is. */
 export async function extractResume(formData: FormData): Promise<{ text: string } | { error: string }> {
@@ -33,17 +36,18 @@ export async function extractResume(formData: FormData): Promise<{ text: string 
 export async function prefillSkills(input: {
   resume: string;
   packId: string;
-}): Promise<{ ratings: Prefill[] } | { error: string }> {
+}): Promise<PrefillResult | { error: string }> {
   await requireUser();
   const pack = getPack(input.packId);
   if (!pack) return { error: "Pick a role first." };
   try {
-    const ratings = await prefillRatings(
+    const { ratings, roles } = await prefillRatings(
       input.resume,
       pack.skills.map((s) => ({ key: s.id, name: s.name })),
     );
     const valid = new Set(pack.skills.map((s) => s.id));
     return {
+      roles,
       ratings: ratings
         .filter((r) => valid.has(r.key))
         .map((r) => ({ ...r, rating: r.rating && r.rating >= 1 && r.rating <= 5 ? Math.round(r.rating) : null })),
@@ -57,7 +61,8 @@ export async function prefillSkills(input: {
 export async function finishOnboarding(input: {
   resume: string;
   packId: string;
-  skills: { key: string; name: string; rating: number; note?: string | null }[];
+  roles: Role[];
+  skills: { key: string; name: string; rating: number; note?: string | null; usedAt?: { role: string; what: string }[] }[];
 }): Promise<{ error: string } | { ok: true }> {
   const { supabase, user } = await requireUser();
   const pack = getPack(input.packId);
@@ -70,6 +75,7 @@ export async function finishOnboarding(input: {
     user_id: user.id,
     role_pack_id: pack.id,
     base_resume: resume,
+    roles: input.roles.slice(0, 30),
     onboarded_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   });
@@ -83,6 +89,7 @@ export async function finishOnboarding(input: {
       name: s.name,
       rating: s.rating,
       note: s.note?.trim() || null,
+      used_at: cleanUses(s.usedAt),
       source: "onboarding" as const,
       updated_at: new Date().toISOString(),
     }));

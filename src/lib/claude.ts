@@ -52,13 +52,34 @@ export async function resumeFromPdf(base64: string): Promise<string> {
   return out.resume_md;
 }
 
-/** Pre-rate role-pack skills from the resume so onboarding is mostly confirming. */
+const RoleSchema = z.object({
+  company: z.string(),
+  title: z.string(),
+  dates: z.string().nullable(),
+});
+
+/** The work-history entries on a resume, newest first. */
+export async function extractRoles(resume: string): Promise<z.infer<typeof RoleSchema>[]> {
+  const out = await ask({
+    schema: z.object({ roles: z.array(RoleSchema) }),
+    effort: "low",
+    system: "List every work-history entry on this resume, newest first: company, job title, and dates exactly as written. Include freelance or self-employed entries. Do not include education.",
+    content: resume,
+  });
+  return out.roles;
+}
+
+/** Pre-rate role-pack skills from the resume (and list its roles) so onboarding is mostly confirming. */
 export async function prefillRatings(
   resume: string,
   skills: { key: string; name: string }[],
-): Promise<{ key: string; rating: number | null; evidence: string | null }[]> {
-  const out = await ask({
+): Promise<{
+  roles: z.infer<typeof RoleSchema>[];
+  ratings: { key: string; rating: number | null; evidence: string | null }[];
+}> {
+  return ask({
     schema: z.object({
+      roles: z.array(RoleSchema).describe("Every work-history entry, newest first. No education."),
       ratings: z.array(
         z.object({
           key: z.string(),
@@ -70,10 +91,10 @@ export async function prefillRatings(
     effort: "low",
     system: `You estimate how strong a software engineer is at each listed skill, using only their resume.
 Scale: 1 never used, 2 tinkered, 3 used at work, 4 strong (years of professional use or ownership), 5 expert.
-Only rate a skill when the resume gives real evidence; quote that evidence verbatim. If the resume says nothing about a skill, return rating null and evidence null. Never guess high. Return one entry per listed key.`,
+Only rate a skill when the resume gives real evidence; quote that evidence verbatim. If the resume says nothing about a skill, return rating null and evidence null. Never guess high. Return one entry per listed key.
+Also list every work-history entry (company, title, dates exactly as written), newest first.`,
     content: `<resume>\n${resume}\n</resume>\n\n<skills>\n${skills.map((s) => `${s.key}: ${s.name}`).join("\n")}\n</skills>`,
   });
-  return out.ratings;
 }
 
 export type JobAnalysis = {
@@ -103,11 +124,18 @@ export type BuilderResult = { resume_md: string; changes: string[] };
 export async function buildResume(input: {
   baseResume: string;
   jd: string;
-  confirmed: { name: string; rating: number; note?: string | null }[];
+  confirmed: { name: string; rating: number; note?: string | null; usedAt?: { role: string; what: string }[] }[];
   mustRemove?: string[];
 }): Promise<BuilderResult> {
   const confirmed =
-    input.confirmed.map((s) => `- ${s.name} (${s.rating}/5)${s.note ? `: ${s.note}` : ""}`).join("\n") ||
+    input.confirmed
+      .map(
+        (s) =>
+          `- ${s.name} (${s.rating}/5)${s.note ? `. Note: "${s.note}"` : ""}${(s.usedAt ?? [])
+            .map((u) => `\n    - At ${u.role}${u.what.trim() ? `, in their words: "${u.what.trim()}"` : ""}`)
+            .join("")}`,
+      )
+      .join("\n") ||
     "(none confirmed)";
   const removal = input.mustRemove?.length
     ? `\n\nA previous draft claimed skills the candidate never confirmed. Remove every mention of: ${input.mustRemove.join(", ")}.`
@@ -124,7 +152,7 @@ export async function buildResume(input: {
 Hard rules, in priority order:
 1. The fact source is closed. Every claim must trace to the base resume or to the candidate's confirmed skills and their own notes. Never invent employers, projects, dates, degrees, titles, or numbers. Keep every figure at its original magnitude.
 2. Never claim a technology that is not in the base resume or the confirmed list. If the job wants something the candidate lacks, leave it out. No "familiar with" or "exposure to" hedges, and never mention gaps.
-3. Candidate notes are facts you may use, worded naturally, but never embellished.
+3. Skills live in context, never as a bare list. When a confirmed skill says where it was used, work it into that experience entry: a bullet or phrase about what they did with it there, grounded in their own words. "Side project" goes in a Projects section. A skill with no place and no note may only appear in the Skills section. Their notes are facts you may reword naturally but never embellish.
 4. Keep work-history entries in their original order. Reword, reorder bullets within an entry, and cut weak bullets instead.
 5. Lead with the 3-5 job must-haves the candidate honestly has. Mirror the job's terminology where truthful. No keyword stuffing.
 6. Bullets describe outcomes, not duties. Plain, specific language. No em-dashes.

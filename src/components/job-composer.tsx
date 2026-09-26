@@ -11,18 +11,18 @@ import { Kbd } from "@/components/ui/kbd";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import type { JobAnalysis } from "@/lib/claude";
-import type { JobSkill } from "@/lib/scoring";
+import type { JobSkill, Role } from "@/lib/scoring";
 import { UnknownSkillsDialog, type SkillEntry } from "./unknown-skills-dialog";
 
 export type ComposerActions = {
-  analyzeJobAction: (jd: string) => Promise<{ analysis: JobAnalysis; unknown: JobSkill[] } | { error: string }>;
+  analyzeJobAction: (jd: string) => Promise<{ analysis: JobAnalysis; unknown: JobSkill[]; roles: Role[] } | { error: string }>;
   saveJobSkills: (entries: SkillEntry[]) => Promise<{ ok: true } | { error: string }>;
   tailorJob: (input: { jd: string; analysis: JobAnalysis }) => Promise<{ id: string; title: string } | { error: string }>;
 };
 
 type Phase = "idle" | "analyzing" | "asking" | "tailoring";
 
-export type ComposerState = { jd?: string; phase?: Phase; analysis?: JobAnalysis; unknown?: JobSkill[] };
+export type ComposerState = { jd?: string; phase?: Phase; analysis?: JobAnalysis; unknown?: JobSkill[]; roles?: Role[] };
 
 const TAILOR_STAGES = [
   "Rewriting your resume for this job",
@@ -45,6 +45,7 @@ export function JobComposer({
   const [phase, setPhase] = useState<Phase>(initial.phase ?? "idle");
   const [analysis, setAnalysis] = useState<JobAnalysis | undefined>(initial.analysis);
   const [unknown, setUnknown] = useState<JobSkill[]>(initial.unknown ?? []);
+  const [roles, setRoles] = useState<Role[]>(initial.roles ?? []);
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export function JobComposer({
     setAnalysis(result.analysis);
     if (result.unknown.length) {
       setUnknown(result.unknown);
+      setRoles(result.roles);
       return setPhase("asking");
     }
     await tailor(result.analysis);
@@ -149,6 +151,7 @@ export function JobComposer({
         <UnknownSkillsDialog
           open
           skills={unknown}
+          roles={roles}
           onDone={answered}
           onCancel={() => {
             setPhase("idle");

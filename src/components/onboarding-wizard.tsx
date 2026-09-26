@@ -7,16 +7,17 @@ import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ItemGroup } from "@/components/ui/item";
+import { Item, ItemContent, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import type { Prefill } from "@/app/onboard/actions";
+import type { Prefill, PrefillResult } from "@/app/onboard/actions";
 import type { RolePack } from "@/lib/role-packs";
-import { strengthsNeedingNotes, type Rating, type SkillProfile } from "@/lib/scoring";
+import { strengthsNeedingNotes, type Rating, type Role, type SkillProfile, type SkillUse } from "@/lib/scoring";
 import { RatingLegend } from "./wizard/rating-picker";
+import { SkillContextFields } from "./wizard/skill-context-fields";
 import { SkillRatingItem } from "./wizard/skill-rating-item";
 import { WizardCard } from "./wizard/wizard-card";
 
@@ -25,11 +26,12 @@ const TOTAL_STEPS = 4;
 
 export type OnboardingActions = {
   extractResume: (formData: FormData) => Promise<{ text: string } | { error: string }>;
-  prefillSkills: (input: { resume: string; packId: string }) => Promise<{ ratings: Prefill[] } | { error: string }>;
+  prefillSkills: (input: { resume: string; packId: string }) => Promise<PrefillResult | { error: string }>;
   finishOnboarding: (input: {
     resume: string;
     packId: string;
-    skills: { key: string; name: string; rating: number; note?: string | null }[];
+    roles: Role[];
+    skills: { key: string; name: string; rating: number; note?: string | null; usedAt?: SkillUse[] }[];
   }) => Promise<{ error: string } | { ok: true }>;
 };
 
@@ -44,6 +46,8 @@ export type OnboardingState = {
   prefill?: Prefill[] | null;
   page?: number;
   notes?: Record<string, string>;
+  roles?: Role[];
+  usedAt?: Record<string, SkillUse[]>;
 };
 
 export function OnboardingWizard({
@@ -65,7 +69,9 @@ export function OnboardingWizard({
   const [ratings, setRatings] = useState<Record<string, Rating>>(initial.ratings ?? {});
   const [prefill, setPrefill] = useState<Prefill[] | null>(initial.prefill ?? null);
   const [page, setPage] = useState(initial.page ?? 0);
-  const [notes, setNotes] = useState<Record<string, string>>(initial.notes ?? {});
+  const [notes] = useState<Record<string, string>>(initial.notes ?? {});
+  const [roles, setRoles] = useState<Role[]>(initial.roles ?? []);
+  const [usedAt, setUsedAt] = useState<Record<string, SkillUse[]>>(initial.usedAt ?? {});
   const [pending, startTransition] = useTransition();
 
   const pack = packs.find((p) => p.id === packId);
@@ -73,9 +79,12 @@ export function OnboardingWizard({
   const evidence = new Map((prefill ?? []).map((p) => [p.key, p]));
 
   const profile: SkillProfile = Object.fromEntries(
-    Object.entries(ratings).map(([key, rating]) => [key, { key, name: key, rating, note: notes[key] || null }]),
+    Object.entries(ratings).map(([key, rating]) => [key, { key, name: key, rating, note: notes[key] || null, usedAt: usedAt[key] }]),
   );
-  const strengths = pack ? strengthsNeedingNotes(pack.skills, profile, resume) : [];
+  // Freeze the list when the step opens, so a skill doesn't vanish as soon as you describe it.
+  const [strengthKeys, setStrengthKeys] = useState<string[] | null>(null);
+  const liveStrengths = pack ? strengthsNeedingNotes(pack.skills, profile, resume) : [];
+  const strengths = strengthKeys && pack ? pack.skills.filter((s) => strengthKeys.includes(s.id)) : liveStrengths;
 
   function upload(file: File | undefined) {
     if (!file) return;
@@ -104,6 +113,7 @@ export function OnboardingWizard({
         return;
       }
       setPrefill(result.ratings);
+      setRoles(result.roles);
       setRatings((current) => {
         const next = { ...current };
         for (const r of result.ratings) if (r.rating && !next[r.key]) next[r.key] = r.rating as Rating;
@@ -118,9 +128,10 @@ export function OnboardingWizard({
       const result = await actions.finishOnboarding({
         resume,
         packId: pack.id,
+        roles,
         skills: pack.skills
           .filter((s) => ratings[s.id])
-          .map((s) => ({ key: s.id, name: s.name, rating: ratings[s.id], note: notes[s.id] })),
+          .map((s) => ({ key: s.id, name: s.name, rating: ratings[s.id], note: notes[s.id], usedAt: usedAt[s.id] })),
       });
       if ("error" in result) {
         toast.error(result.error);
@@ -135,7 +146,10 @@ export function OnboardingWizard({
 
   function nextFromRate() {
     if (page < pages - 1) return setPage(page + 1);
-    if (strengths.length) return setStep("strengths");
+    if (strengths.length) {
+      setStrengthKeys(strengths.map((s) => s.id));
+      return setStep("strengths");
+    }
     finish();
   }
 
@@ -307,8 +321,8 @@ export function OnboardingWizard({
     <WizardCard
       step={4}
       total={TOTAL_STEPS}
-      title="Back up your strengths"
-      description="You rated these high, but your resume doesn't show them. One line each gives Claude something true to write. Optional."
+      title="Put your strengths in context"
+      description="You rated these high, but your resume doesn't show them. Tell us where you used each one and what you did, and Claude can write it into that job. Optional."
       footer={
         <>
           <Button variant="ghost" onClick={() => setStep("rate")} disabled={pending}>
@@ -320,20 +334,22 @@ export function OnboardingWizard({
         </>
       }
     >
-      <FieldGroup>
+      <div className="space-y-4">
         {strengths.map((s) => (
-          <Field key={s.id}>
-            <FieldLabel htmlFor={`note-${s.id}`}>What have you done with {s.name}?</FieldLabel>
-            <Textarea
-              id={`note-${s.id}`}
-              rows={2}
-              value={notes[s.id] ?? ""}
-              onChange={(e) => setNotes((n) => ({ ...n, [s.id]: e.target.value }))}
-              placeholder={`e.g. "Used ${s.name} every day on the payments team at Acme."`}
+          <Item key={s.id} variant="outline" className="flex-col items-stretch">
+            <ItemContent>
+              <ItemTitle>{s.name}</ItemTitle>
+            </ItemContent>
+            <SkillContextFields
+              idPrefix={s.id}
+              skillName={s.name}
+              roles={roles}
+              uses={usedAt[s.id] ?? []}
+              onChange={(uses) => setUsedAt((u) => ({ ...u, [s.id]: uses }))}
             />
-          </Field>
+          </Item>
         ))}
-      </FieldGroup>
+      </div>
     </WizardCard>
   );
 }

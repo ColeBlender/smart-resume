@@ -3,7 +3,7 @@ import type { Prefill } from "@/app/onboard/actions";
 import type { HistoryRow } from "@/components/history-list";
 import type { Tailoring } from "@/components/result-view";
 import type { JobAnalysis } from "@/lib/claude";
-import type { JobSkill, UserSkill } from "@/lib/scoring";
+import type { JobSkill, Role, UserSkill } from "@/lib/scoring";
 
 export const PREVIEW_USER = { email: "jane@example.com", user_metadata: { full_name: "Jane Doe" } };
 
@@ -28,6 +28,11 @@ export const JD = `Senior Full-stack Engineer at Northwind
 You will build customer-facing features across our React/TypeScript frontend and Node.js services.
 
 Requirements: 5+ years building web apps, strong TypeScript and React, REST API design, PostgreSQL, Kafka, Docker and Kubernetes, AWS, CI/CD. GraphQL a plus. You care about performance and ship iteratively with product and design.`;
+
+export const ROLES: Role[] = [
+  { company: "Acme Payments", title: "Senior Software Engineer", dates: "2021 to present" },
+  { company: "Brightside Health", title: "Software Engineer", dates: "2018 to 2021" },
+];
 
 export const PREFILL: Prefill[] = [
   { key: "git", rating: null, evidence: null },
@@ -115,11 +120,11 @@ export const RESULT_FLAGGED: Tailoring = {
 };
 
 export const SKILLS: UserSkill[] = [
-  { key: "typescript", name: "TypeScript", rating: 5, note: "Primary language for the last 5 years at Acme." },
+  { key: "typescript", name: "TypeScript", rating: 5, usedAt: [{ role: "Acme Payments · Senior Software Engineer", what: "Primary language for the merchant dashboard and the Node services behind it." }, { role: "Brightside Health · Software Engineer", what: "Migrated the scheduling app from JavaScript to TypeScript." }] },
   { key: "react", name: "React", rating: 4, note: null },
-  { key: "rest-apis", name: "REST API Design", rating: 4, note: "Designed the public merchant API." },
+  { key: "rest-apis", name: "REST API Design", rating: 4, usedAt: [{ role: "Acme Payments · Senior Software Engineer", what: "" }] },
   { key: "postgresql", name: "PostgreSQL", rating: 3, note: null },
-  { key: "x-kafka", name: "Kafka", rating: 3, note: "Ran our event pipeline on Kafka, ~2M events/day." },
+  { key: "x-kafka", name: "Kafka", rating: 3, usedAt: [{ role: "Acme Payments · Senior Software Engineer", what: "Ran our order and payout event pipeline on Kafka, about 2M events a day." }] },
   { key: "kubernetes", name: "Kubernetes", rating: 2, note: null },
   { key: "graphql", name: "GraphQL", rating: 1, note: null },
 ];

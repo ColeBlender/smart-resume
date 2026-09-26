@@ -1,5 +1,6 @@
 "use server";
 
+import { cleanUses } from "@/lib/clean-uses";
 import { requireUser } from "@/lib/supabase/server";
 
 export async function updateSkill(input: {
@@ -7,6 +8,7 @@ export async function updateSkill(input: {
   name: string;
   rating: number;
   note?: string | null;
+  usedAt?: { role: string; what: string }[];
 }): Promise<{ ok: true } | { error: string }> {
   const { supabase, user } = await requireUser();
   if (!(input.rating >= 1 && input.rating <= 5)) return { error: "Rating must be 1 to 5." };
@@ -16,6 +18,7 @@ export async function updateSkill(input: {
     name: input.name.slice(0, 80),
     rating: Math.round(input.rating),
     note: input.note?.trim().slice(0, 500) || null,
+    used_at: cleanUses(input.usedAt),
     updated_at: new Date().toISOString(),
   });
   return error ? { error: error.message } : { ok: true };

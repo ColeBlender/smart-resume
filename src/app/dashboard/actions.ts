@@ -1,9 +1,10 @@
 "use server";
 
-import { analyzeJob, buildResume, screenResume, type JobAnalysis } from "@/lib/claude";
+import { cleanUses } from "@/lib/clean-uses";
+import { analyzeJob, buildResume, extractRoles, screenResume, type JobAnalysis } from "@/lib/claude";
 import { requireProfile } from "@/lib/profile";
 import { ALL_SKILLS } from "@/lib/role-packs";
-import { CLAIMABLE, collectJobSkills, findUnbackedClaims, matchJob, type JobSkill } from "@/lib/scoring";
+import { CLAIMABLE, collectJobSkills, findUnbackedClaims, matchJob, type JobSkill, type Role } from "@/lib/scoring";
 import { requireUser } from "@/lib/supabase/server";
 
 function validJd(jd: string): string | null {
@@ -16,14 +17,21 @@ function validJd(jd: string): string | null {
 /** Step 1: what does this job ask for, and what don't we know about the user yet? */
 export async function analyzeJobAction(
   jd: string,
-): Promise<{ analysis: JobAnalysis; unknown: JobSkill[] } | { error: string }> {
+): Promise<{ analysis: JobAnalysis; unknown: JobSkill[]; roles: Role[] } | { error: string }> {
   const invalid = validJd(jd);
   if (invalid) return { error: invalid };
-  const { skills, pack } = await requireProfile();
+  const { supabase, user, skills, pack, baseResume, roles } = await requireProfile();
   try {
     const analysis = await analyzeJob(jd);
     const jobSkills = collectJobSkills(jd, analysis.skills, pack.skills, ALL_SKILLS, skills);
-    return { analysis, unknown: matchJob(jobSkills, skills).unknown };
+    const unknown = matchJob(jobSkills, skills).unknown;
+    // Profiles made before roles existed: parse them once, the first time we need to ask.
+    let known = roles;
+    if (unknown.length && !known.length) {
+      known = await extractRoles(baseResume);
+      await supabase.from("profiles").update({ roles: known }).eq("user_id", user.id);
+    }
+    return { analysis, unknown, roles: known };
   } catch (e) {
     console.error("analyze failed", e);
     return { error: e instanceof Error ? e.message : "Couldn't read that job description." };
@@ -32,7 +40,7 @@ export async function analyzeJobAction(
 
 /** Step 2 (only when needed): the user tells us about skills we hadn't seen. Saved to their profile for good. */
 export async function saveJobSkills(
-  entries: { key: string; name: string; rating: number; note?: string | null }[],
+  entries: { key: string; name: string; rating: number; note?: string | null; usedAt?: { role: string; what: string }[] }[],
 ): Promise<{ ok: true } | { error: string }> {
   const { supabase, user } = await requireUser();
   const rows = entries
@@ -43,6 +51,7 @@ export async function saveJobSkills(
       name: e.name.slice(0, 80),
       rating: Math.round(e.rating),
       note: e.note?.trim().slice(0, 500) || null,
+      used_at: cleanUses(e.usedAt),
       source: "job" as const,
       updated_at: new Date().toISOString(),
     }));

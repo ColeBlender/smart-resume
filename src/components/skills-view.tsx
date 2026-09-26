@@ -18,26 +18,34 @@ import {
 } from "@/components/ui/dialog";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
-import { Textarea } from "@/components/ui/textarea";
-import { CLAIMABLE, type Rating, type UserSkill } from "@/lib/scoring";
+import { CLAIMABLE, type Rating, type Role, type SkillUse, type UserSkill } from "@/lib/scoring";
 import { RatingLegend, RatingPicker } from "./wizard/rating-picker";
+import { SkillContextFields } from "./wizard/skill-context-fields";
 
 export type SkillsActions = {
-  updateSkill: (s: { key: string; name: string; rating: number; note?: string | null }) => Promise<{ ok: true } | { error: string }>;
+  updateSkill: (s: {
+    key: string;
+    name: string;
+    rating: number;
+    note?: string | null;
+    usedAt?: SkillUse[];
+  }) => Promise<{ ok: true } | { error: string }>;
 };
 
 export function SkillsView({
   initial,
   actions,
   baseResume,
+  roles,
 }: {
   initial: UserSkill[];
+  roles: Role[];
   actions: SkillsActions;
   baseResume: string;
 }) {
   const [skills, setSkills] = useState(() => [...initial].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name)));
   const [editing, setEditing] = useState<UserSkill | null>(null);
-  const [draft, setDraft] = useState("");
+  const [draftUsedAt, setDraftUsedAt] = useState<SkillUse[]>([]);
 
   async function save(next: UserSkill) {
     setSkills((cur) => cur.map((s) => (s.key === next.key ? next : s)));
@@ -101,16 +109,20 @@ export function SkillsView({
                       {s.name}
                       {s.rating < CLAIMABLE && <Badge variant="outline">Not claimed</Badge>}
                     </ItemTitle>
-                    <ItemDescription>{s.note || "No note yet."}</ItemDescription>
+                    <ItemDescription>
+                      {s.usedAt?.length
+                        ? s.usedAt.map((u) => (u.what ? `${u.role.split(" · ")[0]}: ${u.what}` : u.role.split(" · ")[0])).join(" · ")
+                        : s.note || "Not placed in a job yet. Tap the pencil to add where you used it."}
+                    </ItemDescription>
                   </ItemContent>
                   <ItemActions>
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Edit note for ${s.name}`}
+                      aria-label={`Edit where you used ${s.name}`}
                       onClick={() => {
                         setEditing(s);
-                        setDraft(s.note ?? "");
+                        setDraftUsedAt(s.usedAt ?? []);
                       }}
                     >
                       <PencilLine />
@@ -132,21 +144,29 @@ export function SkillsView({
       </Card>
 
       <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-        <DialogContent>
+        <DialogContent className="max-h-[90svh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>What have you done with {editing?.name}?</DialogTitle>
-            <DialogDescription>One or two true sentences. Claude may use this on your resumes.</DialogDescription>
+            <DialogTitle>{editing?.name} in context</DialogTitle>
+            <DialogDescription>Where you used it and what you did. Claude writes it into that job on your resumes.</DialogDescription>
           </DialogHeader>
-          <Textarea rows={4} value={draft} onChange={(e) => setDraft(e.target.value)} />
+          {editing && (
+            <SkillContextFields
+              idPrefix={`edit-${editing.key}`}
+              skillName={editing.name}
+              roles={roles}
+              uses={draftUsedAt}
+              onChange={setDraftUsedAt}
+            />
+          )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditing(null)}>
               Cancel
             </Button>
             <Button
               onClick={() => {
-                if (editing) save({ ...editing, note: draft });
+                if (editing) save({ ...editing, usedAt: draftUsedAt });
                 setEditing(null);
-                toast.success("Note saved");
+                toast.success("Saved");
               }}
             >
               Save

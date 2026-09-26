@@ -6,7 +6,22 @@ import type { Skill } from "./role-packs";
 export type Rating = 1 | 2 | 3 | 4 | 5;
 export const CLAIMABLE = 3;
 
-export type UserSkill = { key: string; name: string; rating: Rating; note?: string | null };
+export type UserSkill = {
+  key: string;
+  name: string;
+  rating: Rating;
+  note?: string | null;
+  /** Where they used it and what they did there, in their own words. */
+  usedAt?: SkillUse[];
+};
+
+/** One job (roleLabel, or "Side project") and what the user did with the skill there. */
+export type SkillUse = { role: string; what: string };
+
+/** A work-history entry parsed from the base resume. */
+export type Role = { company: string; title: string; dates?: string | null };
+export const SIDE_PROJECT = "Side project";
+export const roleLabel = (r: Role) => `${r.company} · ${r.title}`;
 /** The living profile: everything the user has told us, keyed by skill key. */
 export type SkillProfile = Record<string, UserSkill>;
 
@@ -150,7 +165,12 @@ export function findUnbackedClaims(
 /** Up to 3 strong skills (4+) the resume never shows evidence for: worth one line each. */
 export function strengthsNeedingNotes(packSkills: Skill[], profile: SkillProfile, resume: string): Skill[] {
   return packSkills
-    .filter((s) => (profile[s.id]?.rating ?? 0) >= 4 && !profile[s.id]?.note && !mentionsSkill(resume, s))
+    .filter(
+      (s) =>
+        (profile[s.id]?.rating ?? 0) >= 4 &&
+        !profile[s.id]?.usedAt?.some((u) => u.what.trim()) &&
+        !mentionsSkill(resume, s),
+    )
     .sort((a, b) => b.weight - a.weight)
     .slice(0, 3);
 }

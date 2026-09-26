@@ -13,24 +13,26 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
-import { CLAIMABLE, RATING_LABELS, type JobSkill, type Rating } from "@/lib/scoring";
+import { CLAIMABLE, RATING_LABELS, type JobSkill, type Rating, type Role, type SkillUse } from "@/lib/scoring";
 import { RatingPicker } from "./wizard/rating-picker";
+import { SkillContextFields } from "./wizard/skill-context-fields";
 
-export type SkillEntry = { key: string; name: string; rating: number; note?: string | null };
+export type SkillEntry = { key: string; name: string; rating: number; note?: string | null; usedAt?: SkillUse[] };
 
 /** "This job asks about things we don't know about you yet": one skill per step. */
 export function UnknownSkillsDialog(props: {
   open: boolean;
   skills: JobSkill[];
+  roles: Role[];
   onDone: (entries: SkillEntry[]) => void;
   onCancel: () => void;
   initialIndex?: number;
   initialRatings?: Record<string, Rating>;
+  initialUsedAt?: Record<string, SkillUse[]>;
 }) {
   const [index, setIndex] = useState(props.initialIndex ?? 0);
   const [ratings, setRatings] = useState<Record<string, Rating>>(props.initialRatings ?? {});
-  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [usedAt, setUsedAt] = useState<Record<string, SkillUse[]>>(props.initialUsedAt ?? {});
 
   const skill = props.skills[index];
   if (!skill) return null;
@@ -42,13 +44,13 @@ export function UnknownSkillsDialog(props: {
     props.onDone(
       props.skills
         .filter((s) => ratings[s.key])
-        .map((s) => ({ key: s.key, name: s.name, rating: ratings[s.key], note: notes[s.key] })),
+        .map((s) => ({ key: s.key, name: s.name, rating: ratings[s.key], usedAt: usedAt[s.key] })),
     );
   }
 
   return (
     <Dialog open={props.open} onOpenChange={(open) => !open && props.onCancel()}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <div className="mb-2 space-y-2">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -72,17 +74,13 @@ export function UnknownSkillsDialog(props: {
           </Field>
 
           {rating && rating >= CLAIMABLE && (
-            <Field>
-              <FieldLabel htmlFor={`note-${skill.key}`}>What have you done with it? (optional)</FieldLabel>
-              <Textarea
-                id={`note-${skill.key}`}
-                rows={3}
-                value={notes[skill.key] ?? ""}
-                onChange={(e) => setNotes((n) => ({ ...n, [skill.key]: e.target.value }))}
-                placeholder={`e.g. "Ran our event pipeline on ${skill.name} at Acme, ~2M events/day."`}
-              />
-              <FieldDescription>Claude can use this as a fact on your resume. It never embellishes it.</FieldDescription>
-            </Field>
+            <SkillContextFields
+              idPrefix={skill.key}
+              skillName={skill.name}
+              roles={props.roles}
+              uses={usedAt[skill.key] ?? []}
+              onChange={(uses) => setUsedAt((u) => ({ ...u, [skill.key]: uses }))}
+            />
           )}
         </div>
 
