@@ -50,7 +50,7 @@ export function UnknownSkillsDialog(props: {
 
   return (
     <Dialog open={props.open} onOpenChange={(open) => !open && props.onCancel()}>
-      <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-lg">
+      <DialogContent onInteractOutside={(e) => e.preventDefault()} className="max-h-[90svh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <div className="mb-2 space-y-2">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">

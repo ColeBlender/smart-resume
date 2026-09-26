@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { Header } from "@/components/header";
 import { OnboardingWizard } from "@/components/onboarding-wizard";
 import { loadSkillProfile } from "@/lib/profile";
 import { ROLE_PACKS } from "@/lib/role-packs";
@@ -24,7 +23,6 @@ export default async function OnboardPage({ searchParams }: PageProps<"/onboard"
 
   return (
     <>
-      <Header user={user} />
       <main className="flex flex-1 items-start justify-center px-4 py-10 sm:items-center">
         <OnboardingWizard
           packs={ROLE_PACKS}

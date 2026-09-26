@@ -32,21 +32,14 @@ export type ComposerState = {
   ready?: ReadyResume;
 };
 
-const TAILOR_STAGES = [
-  "Rewriting your resume for this job",
-  "Running the honesty guard",
-  "Scoring it like their resume screener",
-];
+const TAILOR_STAGES = ["Rewriting your resume for this job", "Running the honesty guard", "Finishing up"];
 
 export function JobComposer({
   actions,
   initial = {},
-  resultHref = (id) => `/tailor/${id}`,
 }: {
   actions: ComposerActions;
   initial?: ComposerState;
-  /** Where the toast's Open button goes. /preview points it at a fixture. */
-  resultHref?: (id: string) => string;
 }) {
   const router = useRouter();
   const [jd, setJd] = useState(initial.jd ?? "");
@@ -151,7 +144,7 @@ export function JobComposer({
         </Button>
       </CardFooter>
 
-      <ResumeReadyDialog resume={ready} href={ready ? resultHref(ready.id) : "#"} onClose={() => setReady(null)} />
+      <ResumeReadyDialog resume={ready} onClose={() => setReady(null)} />
 
       {phase === "asking" && (
         <UnknownSkillsDialog

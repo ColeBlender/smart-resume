@@ -161,28 +161,3 @@ Return the full resume as clean Markdown: name as an H1, a one-line headline, a 
     content: `<base_resume>\n${input.baseResume}\n</base_resume>\n\n<confirmed_skills>\n${confirmed}\n</confirmed_skills>\n\n<job_description>\n${input.jd}\n</job_description>${removal}`,
   });
 }
-
-export type ScreenerResult = { score: number; strengths: string[]; weaknesses: string[] };
-
-/** Score the tailored resume the way the company's resume screener would. */
-export async function screenResume(input: { resume: string; jd: string }): Promise<ScreenerResult> {
-  const out = await ask({
-    schema: z.object({
-      score: z.number().describe("Integer from 0 to 100."),
-      strengths: z.array(z.string()),
-      weaknesses: z.array(z.string()),
-    }),
-    effort: "low",
-    system: `You are the automated resume screener for the company that posted this job. You are not on the candidate's side.
-
-Score the resume 0-100 for this job the way a modern ATS plus a recruiter's 30-second skim would:
-- Keyword and semantic match to the job's must-haves (35%)
-- Title and seniority alignment (15%)
-- Experience fit: years, recency on the primary stack, scale signals (25%)
-- Credibility: outcomes over duties, coherent trajectory, no keyword stuffing (25%)
-
-Be honest and unsentimental: a resume missing a core requirement cannot score high. Give 2-4 specific strengths and 2-4 specific weaknesses.`,
-    content: `<job_description>\n${input.jd}\n</job_description>\n\n<resume>\n${input.resume}\n</resume>`,
-  });
-  return { ...out, score: Math.max(0, Math.min(100, Math.round(out.score))) };
-}

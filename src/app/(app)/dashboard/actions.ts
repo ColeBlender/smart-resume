@@ -1,7 +1,7 @@
 "use server";
 
 import { cleanUses } from "@/lib/clean-uses";
-import { analyzeJob, buildResume, extractRoles, screenResume, type JobAnalysis } from "@/lib/claude";
+import { analyzeJob, buildResume, extractRoles, type JobAnalysis } from "@/lib/claude";
 import type { ReadyResume } from "@/components/resume-ready-dialog";
 import { requireProfile } from "@/lib/profile";
 import { ALL_SKILLS } from "@/lib/role-packs";
@@ -61,7 +61,7 @@ export async function saveJobSkills(
   return error ? { error: error.message } : { ok: true };
 }
 
-/** Step 3: build → honesty guard → (rebuild) → screen → save. */
+/** Step 3: build → honesty guard → (rebuild) → save. */
 export async function tailorJob(input: {
   jd: string;
   analysis: JobAnalysis;
@@ -93,7 +93,6 @@ export async function tailorJob(input: {
       draft = await buildResume({ baseResume, jd, confirmed, mustRemove: flagged.map((s) => s.name) });
       flagged = findUnbackedClaims(draft.resume_md, baseResume, guardable, skills);
     }
-    const screen = await screenResume({ resume: draft.resume_md, jd });
 
     const title = input.analysis.role_title?.slice(0, 120) || "Tailored resume";
     const { data, error } = await supabase
@@ -105,9 +104,6 @@ export async function tailorJob(input: {
         jd_text: jd,
         result_md: draft.resume_md,
         changes: draft.changes,
-        ai_score: screen.score,
-        strengths: screen.strengths,
-        weaknesses: screen.weaknesses,
         coverage_pct: match.coveragePct,
         matched: match.matched.map((s) => s.key),
         gaps: [...match.gaps, ...match.unknown].map((s) => s.key),
@@ -117,15 +113,7 @@ export async function tailorJob(input: {
       .select("id")
       .single();
     if (error) return { error: error.message };
-    return {
-      id: data.id,
-      title,
-      company: input.analysis.company ?? null,
-      score: screen.score,
-      coverage: match.coveragePct,
-      flagged: flagged.length,
-      markdown: draft.resume_md,
-    };
+    return { id: data.id, title, company: input.analysis.company ?? null, markdown: draft.resume_md };
   } catch (e) {
     console.error("tailoring failed", e);
     return { error: e instanceof Error ? e.message : "Tailoring failed. Please try again." };

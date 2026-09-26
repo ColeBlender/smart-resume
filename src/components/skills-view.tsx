@@ -169,7 +169,7 @@ export function SkillsView({
       </Card>
 
       <Dialog open={replacing} onOpenChange={(open) => !saving && setReplacing(open)}>
-        <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-2xl">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="max-h-[90svh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Replace your resume</DialogTitle>
             <DialogDescription>
@@ -190,7 +190,7 @@ export function SkillsView({
       </Dialog>
 
       <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-        <DialogContent className="max-h-[90svh] overflow-y-auto">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="max-h-[90svh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editing?.name} in context</DialogTitle>
             <DialogDescription>Where you used it and what you did. Claude writes it into that job on your resumes.</DialogDescription>

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Item, ItemContent, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
-import type { Prefill, PrefillResult } from "@/app/onboard/actions";
+import type { Prefill, PrefillResult } from "@/app/(app)/onboard/actions";
 import type { RolePack } from "@/lib/role-packs";
 import { strengthsNeedingNotes, type Rating, type Role, type SkillProfile, type SkillUse } from "@/lib/scoring";
 import { RatingLegend } from "./wizard/rating-picker";

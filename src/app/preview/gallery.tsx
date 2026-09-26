@@ -7,13 +7,12 @@ import { HistoryList } from "@/components/history-list";
 import { JobComposer, type ComposerActions } from "@/components/job-composer";
 import { LandingView } from "@/components/landing-view";
 import { OnboardingWizard, type OnboardingActions, type OnboardingState } from "@/components/onboarding-wizard";
-import { ResultView } from "@/components/result-view";
 import { SkillsView } from "@/components/skills-view";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UnknownSkillsDialog } from "@/components/unknown-skills-dialog";
 import { ROLE_PACKS } from "@/lib/role-packs";
-import { ANALYSIS, HISTORY, JD, PREFILL, PREVIEW_USER, RESULT, RESULT_FLAGGED, RESUME, ROLES, SKILLS, UNKNOWN } from "./fixtures";
+import { ANALYSIS, HISTORY, JD, PREFILL, PREVIEW_USER, RESUME, ROLES, SKILLS, TAILORED, UNKNOWN } from "./fixtures";
 
 const wait = <T,>(ms: number, value: T) => new Promise<T>((r) => setTimeout(() => r(value), ms));
 const hang = <T,>() => new Promise<T>(() => {});
@@ -38,16 +37,7 @@ const composerFails: ComposerActions = {
   analyzeJobAction: () => wait(800, { error: "Paste the full job description (a few paragraphs)." }),
 };
 
-const resultHref = () => "/preview#result-clean";
-const READY = {
-  id: "demo-1",
-  title: "Senior Full-stack Engineer",
-  company: "Northwind",
-  score: 81,
-  coverage: 72,
-  flagged: 0,
-  markdown: RESULT.result_md,
-};
+const READY = { id: "demo-1", title: "Senior Full-stack Engineer", company: "Northwind", markdown: TAILORED };
 
 
 type Scenario = { id: string; group: string; label: string; note?: string; render: () => React.ReactNode };
@@ -89,13 +79,12 @@ const SCENARIOS: Scenario[] = [
   { id: "onboard-rate-last", group: "Onboarding", label: "3 · Rate (last page)", render: onboard({ step: "rate", resume: RESUME, packId: "fullstack", prefill: PREFILL, ratings: RATED, page: 5 }) },
   { id: "onboard-strengths", group: "Onboarding", label: "4 · Back up strengths", render: onboard({ step: "strengths", resume: RESUME, packId: "fullstack", prefill: PREFILL, roles: ROLES, ratings: { ...RATED, "ci-cd": 4, docker: 5, aws: 4 } }) },
 
-  { id: "home-flow", group: "Home", label: "Full flow (interactive)", note: "Press Tailor: analyze → 3 questions → tailoring → ready modal. All fake, all fast.", render: home(<JobComposer actions={composer} initial={{ jd: JD }} resultHref={resultHref} />) },
-  { id: "home-flow-known", group: "Home", label: "Full flow, nothing to ask", note: "Press Tailor: skips the questions and goes straight to tailoring.", render: home(<JobComposer actions={composerKnown} initial={{ jd: JD }} resultHref={resultHref} />) },
-  { id: "home-empty", group: "Home", label: "Empty", render: home(<JobComposer actions={composer} resultHref={resultHref} />) },
+  { id: "home-flow", group: "Home", label: "Full flow (interactive)", note: "Press Tailor: analyze → 3 questions → tailoring → ready modal. All fake, all fast.", render: home(<JobComposer actions={composer} initial={{ jd: JD }} />) },
+  { id: "home-flow-known", group: "Home", label: "Full flow, nothing to ask", note: "Press Tailor: skips the questions and goes straight to tailoring.", render: home(<JobComposer actions={composerKnown} initial={{ jd: JD }} />) },
+  { id: "home-empty", group: "Home", label: "Empty", render: home(<JobComposer actions={composer} />) },
   { id: "home-analyzing", group: "Home", label: "Reading the job", render: home(<JobComposer actions={composer} initial={{ jd: JD, phase: "analyzing" }} />) },
   { id: "home-tailoring", group: "Home", label: "Tailoring", render: home(<JobComposer actions={composer} initial={{ jd: JD, phase: "tailoring" }} />) },
-  { id: "home-ready", group: "Home", label: "Resume ready (modal)", render: home(<JobComposer actions={composer} initial={{ ready: READY }} resultHref={resultHref} />) },
-  { id: "home-ready-flagged", group: "Home", label: "Resume ready, guard flagged", render: home(<JobComposer actions={composer} initial={{ ready: { ...READY, score: 64, flagged: 1 } }} resultHref={resultHref} />) },
+  { id: "home-ready", group: "Home", label: "Resume ready (modal)", render: home(<JobComposer actions={composer} initial={{ ready: READY }} />) },
   { id: "home-error", group: "Home", label: "Error toast", note: "Press Tailor to see the error toast.", render: home(<JobComposer actions={composerFails} initial={{ jd: JD }} />) },
 
   { id: "ask-1", group: "Tell us more (modal)", label: "Question 1 of 3", render: home(<><JobComposer actions={composer} initial={{ jd: JD }} /><UnknownSkillsDialog open skills={UNKNOWN} roles={ROLES} onDone={() => toast.success("Answers saved (preview)")} onCancel={noop} /></>) },
@@ -107,8 +96,6 @@ const SCENARIOS: Scenario[] = [
   { id: "resumes", group: "My resumes", label: "With resumes", render: () => <Page path="/resumes"><main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10"><HistoryList rows={HISTORY} /></main></Page> },
   { id: "resumes-empty", group: "My resumes", label: "None yet", render: () => <Page path="/resumes"><main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10"><HistoryList rows={[]} /></main></Page> },
 
-  { id: "result-clean", group: "Result", label: "Guard passed", render: () => <Page path="/tailor/demo"><ResultView t={RESULT} /></Page> },
-  { id: "result-flagged", group: "Result", label: "Guard flagged a skill", render: () => <Page path="/tailor/demo"><ResultView t={RESULT_FLAGGED} /></Page> },
 
   { id: "skills", group: "Profile", label: "Resume + skills", note: "Try Replace: upload any file or paste.", render: () => <Page path="/profile"><SkillsView initial={SKILLS} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }), replaceResume: () => wait(1500, { ok: true as const }), extractResume: () => wait(1200, { text: RESUME }) }} /></Page> },
   { id: "skills-empty", group: "Profile", label: "No skills yet", render: () => <Page path="/profile"><SkillsView initial={[]} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }), replaceResume: () => wait(1500, { ok: true as const }), extractResume: () => wait(1200, { text: RESUME }) }} /></Page> },
