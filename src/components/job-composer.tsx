@@ -116,7 +116,7 @@ export function JobComposer({
               <EmptyDescription>
                 {phase === "analyzing"
                   ? "Finding every skill it asks for and checking it against your profile."
-                  : "Usually under a minute. You'll get a notification when it's ready."}
+                  : "This takes about a minute. You'll get a notification when it's ready."}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -142,8 +142,7 @@ export function JobComposer({
           <Kbd>Enter</Kbd> to tailor · <Kbd>Shift</Kbd> + <Kbd>Enter</Kbd> for a new line
         </span>
         <Button onClick={start} disabled={busy || !ready}>
-          {busy ? <Spinner /> : <Sparkles />} Tailor
-          {!busy && <CornerDownLeft />}
+          <Sparkles /> Tailor <CornerDownLeft />
         </Button>
       </CardFooter>
 
