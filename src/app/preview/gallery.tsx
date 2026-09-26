@@ -25,7 +25,7 @@ const onboarding: OnboardingActions = {
   prefillSkills: () => wait(1200, { ratings: PREFILL, roles: ROLES }),
   finishOnboarding: () => wait(600, { ok: true as const }),
 };
-const onboardingHang: OnboardingActions = { ...onboarding, extractResume: hang, prefillSkills: hang };
+const onboardingHang: OnboardingActions = { ...onboarding, prefillSkills: hang };
 
 const composer: ComposerActions = {
   analyzeJobAction: () => wait(1200, { analysis: ANALYSIS, unknown: UNKNOWN, roles: ROLES }),
@@ -81,7 +81,7 @@ const SCENARIOS: Scenario[] = [
   { id: "landing-error", group: "Landing", label: "Sign-in failed", render: () => <Page signedOut><LandingView error /></Page> },
 
   { id: "onboard-resume", group: "Onboarding", label: "1 · Resume (empty)", note: "Upload any file: the fake reader fills in a sample resume.", render: onboard({}) },
-  { id: "onboard-resume-reading", group: "Onboarding", label: "1 · Resume (reading upload)", note: "Upload any file to see the loading state; it never finishes.", render: onboard({}, onboardingHang) },
+  { id: "onboard-resume-reading", group: "Onboarding", label: "1 · Resume (reading upload)", render: onboard({ reading: true }) },
   { id: "onboard-resume-filled", group: "Onboarding", label: "1 · Resume (filled)", render: onboard({ resume: RESUME }) },
   { id: "onboard-role", group: "Onboarding", label: "2 · Pick a role", render: onboard({ step: "role", resume: RESUME }) },
   { id: "onboard-rate-loading", group: "Onboarding", label: "3 · Rate (Claude pre-rating)", render: onboard({ step: "rate", resume: RESUME, packId: "fullstack" }, onboardingHang) },
@@ -110,8 +110,8 @@ const SCENARIOS: Scenario[] = [
   { id: "result-clean", group: "Result", label: "Guard passed", render: () => <Page path="/tailor/demo"><ResultView t={RESULT} /></Page> },
   { id: "result-flagged", group: "Result", label: "Guard flagged a skill", render: () => <Page path="/tailor/demo"><ResultView t={RESULT_FLAGGED} /></Page> },
 
-  { id: "skills", group: "Profile", label: "Resume + skills", render: () => <Page path="/profile"><SkillsView initial={SKILLS} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }) }} /></Page> },
-  { id: "skills-empty", group: "Profile", label: "No skills yet", render: () => <Page path="/profile"><SkillsView initial={[]} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }) }} /></Page> },
+  { id: "skills", group: "Profile", label: "Resume + skills", note: "Try Replace: upload any file or paste.", render: () => <Page path="/profile"><SkillsView initial={SKILLS} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }), replaceResume: () => wait(1500, { ok: true as const }), extractResume: () => wait(1200, { text: RESUME }) }} /></Page> },
+  { id: "skills-empty", group: "Profile", label: "No skills yet", render: () => <Page path="/profile"><SkillsView initial={[]} roles={ROLES} baseResume={RESUME} actions={{ updateSkill: () => wait(300, { ok: true as const }), replaceResume: () => wait(1500, { ok: true as const }), extractResume: () => wait(1200, { text: RESUME }) }} /></Page> },
 ];
 
 function Page({ children, signedOut, path = "/dashboard" }: { children: React.ReactNode; signedOut?: boolean; path?: string }) {

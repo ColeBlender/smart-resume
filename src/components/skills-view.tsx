@@ -1,10 +1,11 @@
 "use client";
 
-import { PencilLine, RotateCcw } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+import { PencilLine, Replace } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -20,6 +21,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/u
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { CLAIMABLE, type Rating, type Role, type SkillUse, type UserSkill } from "@/lib/scoring";
 import { RatingLegend, RatingPicker } from "./wizard/rating-picker";
+import { ResumeInput, type ExtractResume } from "./resume-input";
 import { SkillContextFields } from "./wizard/skill-context-fields";
 
 export type SkillsActions = {
@@ -30,6 +32,8 @@ export type SkillsActions = {
     note?: string | null;
     usedAt?: SkillUse[];
   }) => Promise<{ ok: true } | { error: string }>;
+  replaceResume: (resume: string) => Promise<{ ok: true } | { error: string }>;
+  extractResume: ExtractResume;
 };
 
 export function SkillsView({
@@ -46,6 +50,23 @@ export function SkillsView({
   const [skills, setSkills] = useState(() => [...initial].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name)));
   const [editing, setEditing] = useState<UserSkill | null>(null);
   const [draftUsedAt, setDraftUsedAt] = useState<SkillUse[]>([]);
+  const router = useRouter();
+  const [resume, setResume] = useState(baseResume);
+  const [replacing, setReplacing] = useState(false);
+  const [newResume, setNewResume] = useState("");
+  const [reading, setReading] = useState(false);
+  const [saving, startSaving] = useTransition();
+
+  function saveResume() {
+    startSaving(async () => {
+      const result = await actions.replaceResume(newResume);
+      if ("error" in result) return void toast.error(result.error);
+      setResume(newResume.trim());
+      setReplacing(false);
+      toast.success("Resume replaced. Your skills and answers are unchanged.");
+      router.refresh();
+    });
+  }
 
   async function save(next: UserSkill) {
     setSkills((cur) => cur.map((s) => (s.key === next.key ? next : s)));
@@ -62,29 +83,33 @@ export function SkillsView({
           <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
           <p className="text-muted-foreground">Your baseline resume and everything you&apos;ve told us about your skills.</p>
         </div>
-        <Button variant="outline" asChild>
-          <Link href="/onboard?redo=1">
-            <RotateCcw /> Update resume &amp; redo setup
-          </Link>
-        </Button>
       </div>
 
       <Card>
         <Collapsible>
           <CardHeader>
             <CardTitle>Baseline resume</CardTitle>
-            <CardDescription>Every tailored resume is built from this. {baseResume.length.toLocaleString()} characters.</CardDescription>
-            <CardAction>
+            <CardDescription>Every tailored resume is built from this. {resume.length.toLocaleString()} characters.</CardDescription>
+            <CardAction className="flex gap-2">
               <CollapsibleTrigger asChild>
                 <Button variant="outline" size="sm">
                   Show
                 </Button>
               </CollapsibleTrigger>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setNewResume("");
+                  setReplacing(true);
+                }}
+              >
+                <Replace /> Replace
+              </Button>
             </CardAction>
           </CardHeader>
           <CollapsibleContent>
             <CardContent className="pt-4">
-              <pre className="font-mono text-xs whitespace-pre-wrap text-muted-foreground">{baseResume}</pre>
+              <pre className="font-mono text-xs whitespace-pre-wrap text-muted-foreground">{resume}</pre>
             </CardContent>
           </CollapsibleContent>
         </Collapsible>
@@ -142,6 +167,27 @@ export function SkillsView({
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={replacing} onOpenChange={(open) => !saving && setReplacing(open)}>
+        <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Replace your resume</DialogTitle>
+            <DialogDescription>
+              Upload or paste your latest version. Your skill ratings and answers stay; we just re-read your job
+              history.
+            </DialogDescription>
+          </DialogHeader>
+          <ResumeInput value={newResume} onChange={setNewResume} extractResume={actions.extractResume} onBusyChange={setReading} />
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setReplacing(false)} disabled={saving}>
+              Cancel
+            </Button>
+            <Button onClick={saveResume} disabled={saving || reading || newResume.trim().length < 200}>
+              {saving && <Spinner />} {saving ? "Reading your jobs…" : "Save resume"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
         <DialogContent className="max-h-[90svh] overflow-y-auto">

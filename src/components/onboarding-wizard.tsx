@@ -4,15 +4,10 @@ import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Item, ItemContent, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
 import type { Prefill, PrefillResult } from "@/app/onboard/actions";
 import type { RolePack } from "@/lib/role-packs";
 import { strengthsNeedingNotes, type Rating, type Role, type SkillProfile, type SkillUse } from "@/lib/scoring";
@@ -20,6 +15,7 @@ import { RatingLegend } from "./wizard/rating-picker";
 import { SkillContextFields } from "./wizard/skill-context-fields";
 import { SkillRatingItem } from "./wizard/skill-rating-item";
 import { WizardCard } from "./wizard/wizard-card";
+import { ResumeInput } from "./resume-input";
 
 const PAGE_SIZE = 6;
 const TOTAL_STEPS = 4;
@@ -48,6 +44,8 @@ export type OnboardingState = {
   notes?: Record<string, string>;
   roles?: Role[];
   usedAt?: Record<string, SkillUse[]>;
+  /** Show the "reading your upload" state (for /preview). */
+  reading?: boolean;
 };
 
 export function OnboardingWizard({
@@ -73,6 +71,7 @@ export function OnboardingWizard({
   const [roles, setRoles] = useState<Role[]>(initial.roles ?? []);
   const [usedAt, setUsedAt] = useState<Record<string, SkillUse[]>>(initial.usedAt ?? {});
   const [pending, startTransition] = useTransition();
+  const [reading, setReading] = useState(false);
 
   const pack = packs.find((p) => p.id === packId);
   const pages = pack ? Math.ceil(pack.skills.length / PAGE_SIZE) : 0;
@@ -85,20 +84,6 @@ export function OnboardingWizard({
   const [strengthKeys, setStrengthKeys] = useState<string[] | null>(null);
   const liveStrengths = pack ? strengthsNeedingNotes(pack.skills, profile, resume) : [];
   const strengths = strengthKeys && pack ? pack.skills.filter((s) => strengthKeys.includes(s.id)) : liveStrengths;
-
-  function upload(file: File | undefined) {
-    if (!file) return;
-    const fd = new FormData();
-    fd.set("file", file);
-    startTransition(async () => {
-      const result = await actions.extractResume(fd);
-      if ("error" in result) toast.error(result.error);
-      else {
-        setResume(result.text);
-        toast.success("Resume read. Check it over, then continue.");
-      }
-    });
-  }
 
   function toRate() {
     if (!pack) return;
@@ -163,57 +148,19 @@ export function OnboardingWizard({
         footer={
           <>
             <span />
-            <Button onClick={() => setStep("role")} disabled={pending || resume.trim().length < 200}>
+            <Button onClick={() => setStep("role")} disabled={reading || resume.trim().length < 200}>
               Continue <ArrowRight />
             </Button>
           </>
         }
       >
-        <Tabs defaultValue={resume ? "paste" : "upload"}>
-          <TabsList>
-            <TabsTrigger value="upload">Upload</TabsTrigger>
-            <TabsTrigger value="paste">Paste</TabsTrigger>
-          </TabsList>
-          <TabsContent value="upload" className="pt-4">
-            {pending ? (
-              <Empty className="border">
-                <EmptyHeader>
-                  <EmptyMedia variant="icon">
-                    <Spinner />
-                  </EmptyMedia>
-                  <EmptyTitle>Reading your resume…</EmptyTitle>
-                  <EmptyDescription>Claude is transcribing it word for word.</EmptyDescription>
-                </EmptyHeader>
-              </Empty>
-            ) : (
-              <Field>
-                <FieldLabel htmlFor="resume-file">Resume file</FieldLabel>
-                <Input
-                  id="resume-file"
-                  type="file"
-                  accept=".pdf,.docx,.txt,.md"
-                  onChange={(e) => upload(e.target.files?.[0])}
-                />
-                <FieldDescription>PDF, DOCX, TXT or Markdown, up to 5 MB.</FieldDescription>
-              </Field>
-            )}
-            {resume && !pending && (
-              <Alert className="mt-4">
-                <Check />
-                <AlertDescription>Got it. Review or edit the text on the Paste tab, then continue.</AlertDescription>
-              </Alert>
-            )}
-          </TabsContent>
-          <TabsContent value="paste" className="pt-4">
-            <Textarea
-              value={resume}
-              onChange={(e) => setResume(e.target.value)}
-              rows={14}
-              placeholder={"Jane Doe\nSenior Software Engineer\n\nExperience\nAcme Corp (2021 to present)\n- Built…"}
-              className="font-mono text-sm"
-            />
-          </TabsContent>
-        </Tabs>
+        <ResumeInput
+          value={resume}
+          onChange={setResume}
+          extractResume={actions.extractResume}
+          onBusyChange={setReading}
+          initialReading={initial.reading}
+        />
       </WizardCard>
     );
   }
