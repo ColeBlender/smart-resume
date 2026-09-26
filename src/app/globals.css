@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f7f4ee;
+  --card: #fffdf9;
+  --ink: #1c1a17;
+  --muted: #6b665d;
+  --line: #e4ded3;
+  --accent: #1f5f45;
+  --accent-soft: #e3efe8;
+  --warn: #9a5b12;
+  --warn-soft: #f8ecd9;
+  --bad: #a3322a;
+  --bad-soft: #f8e1de;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-fraunces);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Rendered resume markdown */
+.resume h1 { font-family: var(--font-fraunces); font-size: 1.75rem; font-weight: 600; margin-bottom: 0.25rem; }
+.resume h2 { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 0.25rem; margin: 1.5rem 0 0.75rem; }
+.resume h3 { font-weight: 600; margin-top: 1rem; }
+.resume p { margin: 0.4rem 0; line-height: 1.6; }
+.resume ul { list-style: disc; padding-left: 1.25rem; margin: 0.4rem 0; }
+.resume li { margin: 0.2rem 0; line-height: 1.55; }
+.resume strong { font-weight: 600; }
+
+@media print {
+  body * { visibility: hidden; }
+  .resume, .resume * { visibility: visible; }
+  .resume { position: absolute; inset: 0 auto auto 0; width: 100%; border: none; box-shadow: none; padding: 0; }
+}
