@@ -30,7 +30,7 @@ const onboardingHang: OnboardingActions = { ...onboarding, extractResume: hang, 
 const composer: ComposerActions = {
   analyzeJobAction: () => wait(1200, { analysis: ANALYSIS, unknown: UNKNOWN, roles: ROLES }),
   saveJobSkills: () => wait(300, { ok: true as const }),
-  tailorJob: () => wait(2500, { id: "demo-1", title: "Senior Full-stack Engineer" }),
+  tailorJob: () => wait(2500, READY),
 };
 const composerKnown: ComposerActions = { ...composer, analyzeJobAction: () => wait(1200, { analysis: ANALYSIS, unknown: [], roles: ROLES }) };
 const composerFails: ComposerActions = {
@@ -39,6 +39,15 @@ const composerFails: ComposerActions = {
 };
 
 const resultHref = () => "/preview#result-clean";
+const READY = {
+  id: "demo-1",
+  title: "Senior Full-stack Engineer",
+  company: "Northwind",
+  score: 81,
+  coverage: 72,
+  flagged: 0,
+  markdown: RESULT.result_md,
+};
 
 
 type Scenario = { id: string; group: string; label: string; note?: string; render: () => React.ReactNode };
@@ -80,18 +89,19 @@ const SCENARIOS: Scenario[] = [
   { id: "onboard-rate-last", group: "Onboarding", label: "3 · Rate (last page)", render: onboard({ step: "rate", resume: RESUME, packId: "fullstack", prefill: PREFILL, ratings: RATED, page: 5 }) },
   { id: "onboard-strengths", group: "Onboarding", label: "4 · Back up strengths", render: onboard({ step: "strengths", resume: RESUME, packId: "fullstack", prefill: PREFILL, roles: ROLES, ratings: { ...RATED, "ci-cd": 4, docker: 5, aws: 4 } }) },
 
-  { id: "home-flow", group: "Home", label: "Full flow (interactive)", note: "Press Tailor: analyze → 3 questions → tailoring → toast. All fake, all fast.", render: home(<JobComposer actions={composer} initial={{ jd: JD }} resultHref={resultHref} />) },
+  { id: "home-flow", group: "Home", label: "Full flow (interactive)", note: "Press Tailor: analyze → 3 questions → tailoring → ready modal. All fake, all fast.", render: home(<JobComposer actions={composer} initial={{ jd: JD }} resultHref={resultHref} />) },
   { id: "home-flow-known", group: "Home", label: "Full flow, nothing to ask", note: "Press Tailor: skips the questions and goes straight to tailoring.", render: home(<JobComposer actions={composerKnown} initial={{ jd: JD }} resultHref={resultHref} />) },
   { id: "home-empty", group: "Home", label: "Empty", render: home(<JobComposer actions={composer} resultHref={resultHref} />) },
   { id: "home-analyzing", group: "Home", label: "Reading the job", render: home(<JobComposer actions={composer} initial={{ jd: JD, phase: "analyzing" }} />) },
   { id: "home-tailoring", group: "Home", label: "Tailoring", render: home(<JobComposer actions={composer} initial={{ jd: JD, phase: "tailoring" }} />) },
+  { id: "home-ready", group: "Home", label: "Resume ready (modal)", render: home(<JobComposer actions={composer} initial={{ ready: READY }} resultHref={resultHref} />) },
+  { id: "home-ready-flagged", group: "Home", label: "Resume ready, guard flagged", render: home(<JobComposer actions={composer} initial={{ ready: { ...READY, score: 64, flagged: 1 } }} resultHref={resultHref} />) },
   { id: "home-error", group: "Home", label: "Error toast", note: "Press Tailor to see the error toast.", render: home(<JobComposer actions={composerFails} initial={{ jd: JD }} />) },
 
   { id: "ask-1", group: "Tell us more (modal)", label: "Question 1 of 3", render: home(<><JobComposer actions={composer} initial={{ jd: JD }} /><UnknownSkillsDialog open skills={UNKNOWN} roles={ROLES} onDone={() => toast.success("Answers saved (preview)")} onCancel={noop} /></>) },
   { id: "ask-note", group: "Tell us more (modal)", label: "Rated 3+ (jobs + what you did)", render: home(<><JobComposer actions={composer} initial={{ jd: JD }} /><UnknownSkillsDialog open skills={UNKNOWN} roles={ROLES} initialRatings={{ "x-kafka": 4 }} initialUsedAt={{ "x-kafka": [{ role: "Acme Payments · Senior Software Engineer", what: "Ran our order and payout event pipeline on Kafka, about 2M events a day." }, { role: "Side project", what: "" }] }} onDone={noop} onCancel={noop} /></>) },
   { id: "ask-last", group: "Tell us more (modal)", label: "Last question", render: home(<><JobComposer actions={composer} initial={{ jd: JD }} /><UnknownSkillsDialog open skills={UNKNOWN} roles={ROLES} initialIndex={2} initialRatings={{ "x-kafka": 4, kubernetes: 2, graphql: 1 }} onDone={noop} onCancel={noop} /></>) },
 
-  { id: "toast-ready", group: "Toasts", label: "Resume ready", note: "Click the button to fire it.", render: () => <Page><main className="p-10"><Button onClick={() => toast.success("Your tailored resume is ready", { description: "Senior Full-stack Engineer", action: { label: "Open", onClick: noop } })}>Fire toast</Button></main></Page> },
   { id: "toast-error", group: "Toasts", label: "Error", render: () => <Page><main className="p-10"><Button variant="destructive" onClick={() => toast.error("Tailoring failed. Please try again.")}>Fire toast</Button></main></Page> },
 
   { id: "resumes", group: "My resumes", label: "With resumes", render: () => <Page path="/resumes"><main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10"><HistoryList rows={HISTORY} /></main></Page> },

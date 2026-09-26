@@ -2,6 +2,7 @@
 
 import { cleanUses } from "@/lib/clean-uses";
 import { analyzeJob, buildResume, extractRoles, screenResume, type JobAnalysis } from "@/lib/claude";
+import type { ReadyResume } from "@/components/resume-ready-dialog";
 import { requireProfile } from "@/lib/profile";
 import { ALL_SKILLS } from "@/lib/role-packs";
 import { CLAIMABLE, collectJobSkills, findUnbackedClaims, matchJob, type JobSkill, type Role } from "@/lib/scoring";
@@ -64,7 +65,7 @@ export async function saveJobSkills(
 export async function tailorJob(input: {
   jd: string;
   analysis: JobAnalysis;
-}): Promise<{ id: string; title: string } | { error: string }> {
+}): Promise<ReadyResume | { error: string }> {
   const invalid = validJd(input.jd);
   if (invalid) return { error: invalid };
   const { supabase, user, pack, skills, baseResume } = await requireProfile();
@@ -116,7 +117,15 @@ export async function tailorJob(input: {
       .select("id")
       .single();
     if (error) return { error: error.message };
-    return { id: data.id, title };
+    return {
+      id: data.id,
+      title,
+      company: input.analysis.company ?? null,
+      score: screen.score,
+      coverage: match.coveragePct,
+      flagged: flagged.length,
+      markdown: draft.resume_md,
+    };
   } catch (e) {
     console.error("tailoring failed", e);
     return { error: e instanceof Error ? e.message : "Tailoring failed. Please try again." };

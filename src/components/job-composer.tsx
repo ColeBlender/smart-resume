@@ -12,17 +12,25 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import type { JobAnalysis } from "@/lib/claude";
 import type { JobSkill, Role } from "@/lib/scoring";
+import { ResumeReadyDialog, type ReadyResume } from "./resume-ready-dialog";
 import { UnknownSkillsDialog, type SkillEntry } from "./unknown-skills-dialog";
 
 export type ComposerActions = {
   analyzeJobAction: (jd: string) => Promise<{ analysis: JobAnalysis; unknown: JobSkill[]; roles: Role[] } | { error: string }>;
   saveJobSkills: (entries: SkillEntry[]) => Promise<{ ok: true } | { error: string }>;
-  tailorJob: (input: { jd: string; analysis: JobAnalysis }) => Promise<{ id: string; title: string } | { error: string }>;
+  tailorJob: (input: { jd: string; analysis: JobAnalysis }) => Promise<ReadyResume | { error: string }>;
 };
 
 type Phase = "idle" | "analyzing" | "asking" | "tailoring";
 
-export type ComposerState = { jd?: string; phase?: Phase; analysis?: JobAnalysis; unknown?: JobSkill[]; roles?: Role[] };
+export type ComposerState = {
+  jd?: string;
+  phase?: Phase;
+  analysis?: JobAnalysis;
+  unknown?: JobSkill[];
+  roles?: Role[];
+  ready?: ReadyResume;
+};
 
 const TAILOR_STAGES = [
   "Rewriting your resume for this job",
@@ -47,6 +55,7 @@ export function JobComposer({
   const [unknown, setUnknown] = useState<JobSkill[]>(initial.unknown ?? []);
   const [roles, setRoles] = useState<Role[]>(initial.roles ?? []);
   const [stage, setStage] = useState(0);
+  const [ready, setReady] = useState<ReadyResume | null>(initial.ready ?? null);
 
   useEffect(() => {
     if (phase !== "tailoring") return;
@@ -55,10 +64,10 @@ export function JobComposer({
   }, [phase]);
 
   const busy = phase !== "idle";
-  const ready = jd.trim().length >= 200;
+  const longEnough = jd.trim().length >= 200;
 
   async function start() {
-    if (busy || !ready) return;
+    if (busy || !longEnough) return;
     setPhase("analyzing");
     const result = await actions.analyzeJobAction(jd);
     if ("error" in result) {
@@ -92,11 +101,7 @@ export function JobComposer({
     if ("error" in result) return toast.error(result.error);
     setJd("");
     router.refresh();
-    toast.success("Your tailored resume is ready", {
-      description: result.title,
-      duration: 15000,
-      action: { label: "Open", onClick: () => router.push(resultHref(result.id)) },
-    });
+    setReady(result);
   }
 
   return (
@@ -141,10 +146,12 @@ export function JobComposer({
         <span className="text-xs text-muted-foreground">
           <Kbd>Enter</Kbd> to tailor · <Kbd>Shift</Kbd> + <Kbd>Enter</Kbd> for a new line
         </span>
-        <Button onClick={start} disabled={busy || !ready}>
+        <Button onClick={start} disabled={busy || !longEnough}>
           <Sparkles /> Tailor <CornerDownLeft />
         </Button>
       </CardFooter>
+
+      <ResumeReadyDialog resume={ready} href={ready ? resultHref(ready.id) : "#"} onClose={() => setReady(null)} />
 
       {phase === "asking" && (
         <UnknownSkillsDialog

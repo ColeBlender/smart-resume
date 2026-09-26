@@ -1,47 +1,28 @@
 "use client";
 
-import { FileText, Files, Home, UserRound } from "lucide-react";
+import { FileText, Files, Menu, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SignOutItem } from "./sign-out-item";
 import { ThemeToggle } from "./theme-toggle";
 
 type HeaderUser = { email?: string; user_metadata?: { avatar_url?: string; full_name?: string } };
 
-const MENU = [
-  { href: "/dashboard", label: "Tailor a resume", icon: Home },
-  { href: "/resumes", label: "My resumes", icon: Files },
-  { href: "/profile", label: "Profile", icon: UserRound },
+const NAV = [
+  { href: "/dashboard", label: "Tailor", icon: Sparkles, match: ["/dashboard"] },
+  { href: "/resumes", label: "My resumes", icon: Files, match: ["/resumes", "/tailor"] },
+  { href: "/profile", label: "Profile", icon: UserRound, match: ["/profile", "/onboard"] },
 ];
-
-/** Where you are, as breadcrumb crumbs. The last crumb is the current page. */
-function crumbsFor(path: string): { label: string; href?: string }[] {
-  if (path.startsWith("/resumes")) return [{ label: "My resumes" }];
-  if (path.startsWith("/tailor/")) return [{ label: "My resumes", href: "/resumes" }, { label: "Resume" }];
-  if (path.startsWith("/profile")) return [{ label: "Profile" }];
-  if (path.startsWith("/onboard")) return [{ label: "Setup" }];
-  if (path.startsWith("/dashboard")) return [{ label: "Tailor a resume" }];
-  return [];
-}
 
 export function Logo() {
   return (
@@ -58,7 +39,7 @@ export function Logo() {
 export function Header({ user, path }: { user?: HeaderUser; path?: string }) {
   const pathname = usePathname();
   const current = path ?? pathname;
-  const crumbs = user ? crumbsFor(current) : [];
+  const isActive = (match: string[]) => match.some((m) => current.startsWith(m));
 
   const name = user?.user_metadata?.full_name ?? user?.email ?? "";
   const initials = name
@@ -71,58 +52,69 @@ export function Header({ user, path }: { user?: HeaderUser; path?: string }) {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={user ? "/dashboard" : "/"}>
-                  <Logo />
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            {crumbs.map((c) => (
-              <Fragment key={c.label}>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  {c.href ? (
-                    <BreadcrumbLink asChild>
-                      <Link href={c.href}>{c.label}</Link>
-                    </BreadcrumbLink>
-                  ) : (
-                    <BreadcrumbPage>{c.label}</BreadcrumbPage>
-                  )}
-                </BreadcrumbItem>
-              </Fragment>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+        <div className="flex items-center gap-6">
+          <Link href={user ? "/dashboard" : "/"}>
+            <Logo />
+          </Link>
+          {user && (
+            <nav className="hidden items-center gap-1 md:flex">
+              {NAV.map(({ href, label, icon: Icon, match }) => (
+                <Button key={href} variant={isActive(match) ? "secondary" : "ghost"} size="sm" asChild>
+                  <Link href={href} aria-current={isActive(match) ? "page" : undefined}>
+                    <Icon /> {label}
+                  </Link>
+                </Button>
+              ))}
+            </nav>
+          )}
+        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <ThemeToggle />
           {user && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account menu">
-                  <Avatar className="size-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url} alt="" />
-                    <AvatarFallback>{initials || "?"}</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="truncate font-normal text-muted-foreground">{user.email}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {MENU.map(({ href, label, icon: Icon }) => (
-                  <DropdownMenuItem key={href} asChild className={current.startsWith(href) ? "bg-accent" : undefined}>
-                    <Link href={href}>
-                      <Icon /> {label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuSeparator />
-                <SignOutItem />
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account menu">
+                    <Avatar className="size-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt="" />
+                      <AvatarFallback>{initials || "?"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="truncate font-normal text-muted-foreground">{user.email}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <SignOutItem />
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+                    <Menu />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-72">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <Logo />
+                    </SheetTitle>
+                  </SheetHeader>
+                  <nav className="flex flex-col gap-1 px-4">
+                    {NAV.map(({ href, label, icon: Icon, match }) => (
+                      <SheetClose key={href} asChild>
+                        <Button variant={isActive(match) ? "secondary" : "ghost"} className="justify-start" asChild>
+                          <Link href={href} aria-current={isActive(match) ? "page" : undefined}>
+                            <Icon /> {label}
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                    ))}
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </>
           )}
         </div>
       </div>
