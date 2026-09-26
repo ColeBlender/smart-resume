@@ -9,7 +9,7 @@ const MUTED = "#6b7280";
 
 const s = StyleSheet.create({
   page: { paddingVertical: 40, paddingHorizontal: 48, fontSize: 10, lineHeight: 1.45, color: INK, fontFamily: "Helvetica" },
-  name: { fontSize: 22, fontFamily: "Helvetica-Bold", color: NAVY, marginBottom: 2 },
+  name: { fontSize: 22, lineHeight: 1.2, fontFamily: "Helvetica-Bold", color: NAVY, marginBottom: 6 },
   section: {
     fontSize: 9,
     fontFamily: "Helvetica-Bold",

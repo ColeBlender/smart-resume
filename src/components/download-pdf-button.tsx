@@ -4,7 +4,6 @@ import { Download } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { resumeFileName } from "@/lib/resume-file-name";
 
 export function DownloadPdfButton({
@@ -37,7 +36,7 @@ export function DownloadPdfButton({
   return (
     <div className="flex flex-col items-center gap-1.5">
       <Button size={size} onClick={download} disabled={busy}>
-        {busy ? <Spinner /> : <Download />} Download PDF
+        <Download /> Download PDF
       </Button>
       {showFileName && <span className="font-mono text-xs text-muted-foreground">{fileName}</span>}
     </div>
