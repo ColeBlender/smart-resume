@@ -1,0 +1,446 @@
+{
+  "id": "mobile",
+  "title": "Mobile Engineer",
+  "summary": "Designs, builds, and ships native or cross-platform mobile applications across iOS, Android, React Native, and/or Flutter.",
+  "postings_sampled": 26,
+  "skills": [
+    {
+      "id": "git",
+      "name": "Git",
+      "category": "Tools",
+      "weight": 5,
+      "frequency_pct": 85,
+      "aliases": [
+        "Version Control",
+        "GitHub",
+        "GitLab"
+      ],
+      "question": "Have you used Git for version control in a professional setting?"
+    },
+    {
+      "id": "rest-apis",
+      "name": "REST APIs",
+      "category": "Practices",
+      "weight": 5,
+      "frequency_pct": 72,
+      "aliases": [
+        "RESTful APIs",
+        "REST",
+        "API integration"
+      ],
+      "question": "Have you integrated a mobile app with backend REST APIs?"
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 55,
+      "aliases": [
+        "Continuous Integration",
+        "Fastlane",
+        "GitHub Actions"
+      ],
+      "question": "Have you set up or maintained a CI/CD pipeline for a mobile app?"
+    },
+    {
+      "id": "mobile-app-architecture",
+      "name": "Mobile App Architecture",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 55,
+      "aliases": [
+        "MVVM",
+        "Clean Architecture",
+        "design patterns"
+      ],
+      "question": "Have you owned the architecture of a mobile app feature end-to-end (design through release)?"
+    },
+    {
+      "id": "performance-optimization",
+      "name": "Performance & Memory Optimization",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 50,
+      "aliases": [
+        "Profiling",
+        "memory tuning",
+        "battery efficiency"
+      ],
+      "question": "Have you profiled and fixed a performance or memory issue in a shipped mobile app?"
+    },
+    {
+      "id": "kotlin",
+      "name": "Kotlin",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 42,
+      "aliases": [
+        "Kotlin/Android"
+      ],
+      "question": "Do you have professional experience writing production Android apps in Kotlin?"
+    },
+    {
+      "id": "unit-testing",
+      "name": "Unit & Integration Testing",
+      "category": "Testing & Quality",
+      "weight": 3,
+      "frequency_pct": 40,
+      "aliases": [
+        "XCTest",
+        "JUnit",
+        "test automation"
+      ],
+      "question": "Do you write automated unit or integration tests for mobile code as standard practice?"
+    },
+    {
+      "id": "app-store-release-management",
+      "name": "App Store / Play Store Release Management",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 40,
+      "aliases": [
+        "App Store submission",
+        "Google Play Store",
+        "TestFlight",
+        "release trains"
+      ],
+      "question": "Have you managed a mobile app's release process through the App Store or Google Play?"
+    },
+    {
+      "id": "react-native",
+      "name": "React Native",
+      "category": "Mobile",
+      "weight": 3,
+      "frequency_pct": 38,
+      "aliases": [
+        "RN",
+        "Expo (React Native)"
+      ],
+      "question": "Have you shipped a production cross-platform app with React Native?"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [
+        "TS"
+      ],
+      "question": "Have you built a React Native app using TypeScript?"
+    },
+    {
+      "id": "push-notifications",
+      "name": "Push Notifications",
+      "category": "Mobile",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [
+        "Cloud messaging",
+        "FCM",
+        "APNs"
+      ],
+      "question": "Have you implemented push notifications in a production mobile app?"
+    },
+    {
+      "id": "swift",
+      "name": "Swift",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 31,
+      "aliases": [
+        "Swift/iOS"
+      ],
+      "question": "Do you have professional experience writing production iOS apps in Swift?"
+    },
+    {
+      "id": "offline-first-sync",
+      "name": "Offline-First & Data Sync",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 25,
+      "aliases": [
+        "Offline support",
+        "local-remote sync"
+      ],
+      "question": "Have you built offline-first functionality with local/remote data sync in a mobile app?"
+    },
+    {
+      "id": "mobile-local-storage",
+      "name": "Local Data Persistence",
+      "category": "Databases",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "SQLite",
+        "Realm",
+        "Core Data",
+        "Room"
+      ],
+      "question": "Have you used an on-device database such as SQLite, Realm, Core Data, or Room?"
+    },
+    {
+      "id": "accessibility",
+      "name": "Mobile Accessibility (a11y)",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "VoiceOver",
+        "TalkBack",
+        "WCAG"
+      ],
+      "question": "Have you implemented or audited a mobile app for accessibility (VoiceOver/TalkBack)?"
+    },
+    {
+      "id": "state-management",
+      "name": "State Management",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "Redux",
+        "Zustand",
+        "MobX",
+        "TanStack Query"
+      ],
+      "question": "Have you used a state-management library (Redux, Zustand, MobX, etc.) in a mobile app?"
+    },
+    {
+      "id": "crash-reporting-observability",
+      "name": "Crash Reporting & Observability",
+      "category": "Tools",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "Sentry",
+        "Crashlytics",
+        "Firebase Analytics"
+      ],
+      "question": "Have you set up crash reporting or observability tooling (e.g. Sentry, Crashlytics) for a mobile app?"
+    },
+    {
+      "id": "automated-ui-testing",
+      "name": "Automated UI Testing",
+      "category": "Testing & Quality",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "Espresso",
+        "Detox",
+        "XCUITest"
+      ],
+      "question": "Have you written automated UI/end-to-end tests for a mobile app (Espresso, Detox, XCUITest)?"
+    },
+    {
+      "id": "swiftui",
+      "name": "SwiftUI",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "SwiftUI/UIKit interop"
+      ],
+      "question": "Have you built production iOS screens using SwiftUI?"
+    },
+    {
+      "id": "jetpack-compose",
+      "name": "Jetpack Compose",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "Compose"
+      ],
+      "question": "Have you built production Android screens using Jetpack Compose?"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "category": "Frameworks",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Apollo Client"
+      ],
+      "question": "Have you consumed a GraphQL API from a mobile app (e.g. via Apollo)?"
+    },
+    {
+      "id": "kmm",
+      "name": "Kotlin Multiplatform (KMM)",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Kotlin Multiplatform Mobile"
+      ],
+      "question": "Have you shared business logic between iOS and Android using Kotlin Multiplatform?"
+    },
+    {
+      "id": "expo",
+      "name": "Expo",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Expo Router",
+        "EAS Build"
+      ],
+      "question": "Have you built or shipped a React Native app using the Expo managed workflow?"
+    },
+    {
+      "id": "flutter-dart",
+      "name": "Flutter / Dart",
+      "category": "Languages",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Flutter",
+        "Dart"
+      ],
+      "question": "Do you have professional experience building apps with Flutter and Dart?"
+    },
+    {
+      "id": "android-sdk",
+      "name": "Android SDK",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Android Framework"
+      ],
+      "question": "Do you have hands-on experience with the native Android SDK?"
+    },
+    {
+      "id": "ai-tooling",
+      "name": "AI-Assisted Development",
+      "category": "AI & Data",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "AI coding tools",
+        "Copilot",
+        "Claude Code"
+      ],
+      "question": "Do you use AI-assisted development tools (e.g. Copilot, Claude Code) in your day-to-day workflow?"
+    },
+    {
+      "id": "mentorship",
+      "name": "Code Review & Mentorship",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Mentoring",
+        "technical leadership"
+      ],
+      "question": "Have you mentored other engineers or led code reviews on a mobile team?"
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 15,
+      "aliases": [
+        "Amazon Web Services"
+      ],
+      "question": "Have you worked with AWS as the backend for a mobile application?"
+    },
+    {
+      "id": "objective-c",
+      "name": "Objective-C",
+      "category": "Languages",
+      "weight": 1,
+      "frequency_pct": 10,
+      "aliases": [
+        "Obj-C"
+      ],
+      "question": "Do you have experience maintaining legacy Objective-C code in an iOS app?"
+    },
+    {
+      "id": "java",
+      "name": "Java (Android)",
+      "category": "Languages",
+      "weight": 1,
+      "frequency_pct": 10,
+      "aliases": [
+        "Core Java"
+      ],
+      "question": "Do you have experience maintaining legacy Java code in an Android app?"
+    },
+    {
+      "id": "bluetooth-ble",
+      "name": "Bluetooth / BLE",
+      "category": "Mobile",
+      "weight": 1,
+      "frequency_pct": 10,
+      "aliases": [
+        "Bluetooth Low Energy"
+      ],
+      "question": "Have you integrated Bluetooth or BLE device connectivity into a mobile app?"
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "category": "Cloud & Infra",
+      "weight": 1,
+      "frequency_pct": 10,
+      "aliases": [
+        "Containers"
+      ],
+      "question": "Have you used Docker to run backend services supporting a mobile app?"
+    }
+  ],
+  "ats_keywords": [
+    "native mobile development",
+    "cross-platform development",
+    "mobile SDK",
+    "New Architecture (React Native)",
+    "modularization",
+    "large-scale codebases",
+    "cross-functional collaboration",
+    "on-call rotation",
+    "technical mentorship",
+    "design systems",
+    "component-driven UI",
+    "backend-for-frontend (BFF)",
+    "release management",
+    "code reviews",
+    "agile/scrum",
+    "production incident response",
+    "battery and memory efficiency",
+    "app store compliance",
+    "founding engineer",
+    "high-growth startup"
+  ],
+  "sources": [
+    "https://job-boards.greenhouse.io/peloton/jobs/7996670",
+    "https://job-boards.greenhouse.io/block/jobs/5423630008",
+    "https://job-boards.greenhouse.io/roblox/jobs/8140563",
+    "https://job-boards.greenhouse.io/encora10/jobs/5179401007",
+    "https://job-boards.greenhouse.io/urbancompass/jobs/8042532",
+    "https://job-boards.greenhouse.io/robinhood/jobs/7739588",
+    "https://jobs.lever.co/ekohealth/c99b5bd8-e067-4a53-b6d7-a638b9201a58",
+    "https://jobs.lever.co/matchgroup/cb977666-1e41-4098-ad9c-6ab387e56a7a",
+    "https://jobs.lever.co/oowlish/f57a8278-e116-4259-9062-c2c20d3a2000",
+    "https://jobs.lever.co/Yassir/bfc4ce54-e066-44c7-a0e4-4cc7e88e43cb",
+    "https://jobs.lever.co/zopa/b7c4f329-9bbc-4bfc-b90d-d0fee58d30fb",
+    "https://jobs.lever.co/veo/7ec8c80d-37f2-488c-a45a-c5460bad5645",
+    "https://jobs.lever.co/qonto/1a2d308c-baef-4335-b6bd-f7f2bea82cd6",
+    "https://jobs.lever.co/wealthfront/78d6f6d5-1f08-4d5d-87be-c4250567bfb5",
+    "https://jobs.lever.co/spotify/2193db3f-77c5-43b8-b030-8f92c9882bf1",
+    "https://jobs.lever.co/jobgether/d7ad2c09-7ea2-446c-bdb1-613d05683568",
+    "https://jobs.ashbyhq.com/trust-wallet/b9b6b77a-cd08-4063-9a72-bae133875a44",
+    "https://jobs.ashbyhq.com/nectar-social/192caa1d-8f36-472f-b9b4-6804b6957233",
+    "https://jobs.ashbyhq.com/partiful/0a8ff10d-0adb-4978-830b-f2901321302c",
+    "https://jobs.ashbyhq.com/forerunner/04e66d94-c8ef-44be-a85e-b688801c4139",
+    "https://jobs.ashbyhq.com/airapps/b4b7c29d-e120-4d46-a784-6c1b3eaca43d",
+    "https://jobs.ashbyhq.com/Schemata/395aa572-4242-4c35-ac6c-03fd55804475",
+    "https://jobs.ashbyhq.com/replit/8fbbe594-596a-4a4f-844b-dc00111e717f",
+    "https://jobs.ashbyhq.com/berlitz/114f07a2-8404-4878-83f1-2384c1bdcdb2",
+    "https://jobs.ashbyhq.com/tempo/55dd46d0-4492-4bd1-a627-e3f8b2cd0972",
+    "https://jobs.ashbyhq.com/xero/05347706-6613-4e86-80aa-8f8f7ea71d1f"
+  ]
+}

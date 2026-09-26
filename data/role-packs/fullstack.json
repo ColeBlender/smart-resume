@@ -1,0 +1,466 @@
+{
+  "id": "fullstack",
+  "title": "Full-stack Engineer",
+  "summary": "Builds and ships end-to-end web application features, owning everything from the database and API layer through the front-end UI.",
+  "postings_sampled": 30,
+  "skills": [
+    {
+      "id": "git",
+      "name": "Git",
+      "category": "Tools",
+      "weight": 5,
+      "frequency_pct": 90,
+      "aliases": [
+        "Version Control",
+        "GitHub",
+        "GitLab"
+      ],
+      "question": "Have you used Git for version control in a professional setting?"
+    },
+    {
+      "id": "react",
+      "name": "React",
+      "category": "Frameworks",
+      "weight": 5,
+      "frequency_pct": 78,
+      "aliases": [
+        "React.js",
+        "ReactJS"
+      ],
+      "question": "Have you built production front-end applications with React?"
+    },
+    {
+      "id": "rest-apis",
+      "name": "REST APIs",
+      "category": "Practices",
+      "weight": 5,
+      "frequency_pct": 75,
+      "aliases": [
+        "RESTful APIs",
+        "REST"
+      ],
+      "question": "Have you designed or built RESTful APIs for production use?"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "category": "Languages",
+      "weight": 5,
+      "frequency_pct": 73,
+      "aliases": [
+        "TS"
+      ],
+      "question": "Have you built production applications using TypeScript?"
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "category": "Languages",
+      "weight": 4,
+      "frequency_pct": 68,
+      "aliases": [
+        "JS",
+        "ECMAScript"
+      ],
+      "question": "Do you have professional experience writing JavaScript?"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "category": "Frameworks",
+      "weight": 4,
+      "frequency_pct": 65,
+      "aliases": [
+        "Node",
+        "Express",
+        "NestJS"
+      ],
+      "question": "Have you built backend services in Node.js?"
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "category": "Cloud & Infra",
+      "weight": 4,
+      "frequency_pct": 58,
+      "aliases": [
+        "Amazon Web Services",
+        "EC2",
+        "S3",
+        "Lambda"
+      ],
+      "question": "Have you deployed or run production workloads on AWS?"
+    },
+    {
+      "id": "sql",
+      "name": "SQL / Relational Databases",
+      "category": "Databases",
+      "weight": 4,
+      "frequency_pct": 55,
+      "aliases": [
+        "MySQL",
+        "SQL Server",
+        "relational databases"
+      ],
+      "question": "Are you comfortable writing complex SQL queries against relational databases?"
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 55,
+      "aliases": [
+        "Continuous Integration",
+        "Continuous Deployment",
+        "GitHub Actions",
+        "Jenkins"
+      ],
+      "question": "Have you set up or maintained CI/CD pipelines?"
+    },
+    {
+      "id": "testing",
+      "name": "Automated Testing",
+      "category": "Testing & Quality",
+      "weight": 4,
+      "frequency_pct": 55,
+      "aliases": [
+        "Unit testing",
+        "Integration testing",
+        "Jest",
+        "test automation"
+      ],
+      "question": "Do you write automated unit or integration tests as part of your normal workflow?"
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "category": "Databases",
+      "weight": 4,
+      "frequency_pct": 52,
+      "aliases": [
+        "Postgres",
+        "psql"
+      ],
+      "question": "Have you built or maintained production systems on PostgreSQL?"
+    },
+    {
+      "id": "system-design",
+      "name": "System Design",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 52,
+      "aliases": [
+        "Architecture design",
+        "scalability design",
+        "distributed systems"
+      ],
+      "question": "Have you designed the architecture for a scalable production system?"
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "category": "Cloud & Infra",
+      "weight": 4,
+      "frequency_pct": 50,
+      "aliases": [
+        "Containers",
+        "containerization"
+      ],
+      "question": "Have you containerized applications with Docker?"
+    },
+    {
+      "id": "mentorship",
+      "name": "Code Review & Mentorship",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 50,
+      "aliases": [
+        "Mentoring",
+        "technical leadership",
+        "code review"
+      ],
+      "question": "Have you mentored other engineers or led code reviews on a team?"
+    },
+    {
+      "id": "agile-scrum",
+      "name": "Agile / Scrum",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 40,
+      "aliases": [
+        "Scrum",
+        "Sprint planning",
+        "Agile delivery"
+      ],
+      "question": "Have you worked within an Agile/Scrum delivery process?"
+    },
+    {
+      "id": "microservices",
+      "name": "Microservices / SOA",
+      "category": "Cloud & Infra",
+      "weight": 3,
+      "frequency_pct": 38,
+      "aliases": [
+        "Service-oriented architecture",
+        "SOA"
+      ],
+      "question": "Have you built or worked within a microservices architecture?"
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 38,
+      "aliases": [
+        "Python 3"
+      ],
+      "question": "Do you have professional experience building backend services in Python?"
+    },
+    {
+      "id": "performance-optimization",
+      "name": "Performance Optimization",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 38,
+      "aliases": [
+        "Profiling",
+        "load testing",
+        "latency tuning"
+      ],
+      "question": "Have you diagnosed and fixed production performance bottlenecks?"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "category": "Frameworks",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [
+        "GraphQL APIs"
+      ],
+      "question": "Have you built or consumed GraphQL APIs?"
+    },
+    {
+      "id": "csharp-dotnet",
+      "name": "C# / .NET",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 33,
+      "aliases": [
+        ".NET Core",
+        "ASP.NET",
+        "C-Sharp"
+      ],
+      "question": "Do you have professional experience with C# and the .NET stack?"
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "category": "Cloud & Infra",
+      "weight": 3,
+      "frequency_pct": 32,
+      "aliases": [
+        "K8s"
+      ],
+      "question": "Have you deployed or operated applications on Kubernetes?"
+    },
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "category": "Frameworks",
+      "weight": 3,
+      "frequency_pct": 32,
+      "aliases": [
+        "Next"
+      ],
+      "question": "Have you built production applications with Next.js?"
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "category": "Cloud & Infra",
+      "weight": 3,
+      "frequency_pct": 30,
+      "aliases": [
+        "Microsoft Azure"
+      ],
+      "question": "Have you deployed or run production workloads on Microsoft Azure?"
+    },
+    {
+      "id": "java",
+      "name": "Java",
+      "category": "Languages",
+      "weight": 2,
+      "frequency_pct": 22,
+      "aliases": [
+        "Core Java"
+      ],
+      "question": "Do you have professional experience writing production Java code?"
+    },
+    {
+      "id": "serverless",
+      "name": "Serverless",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 22,
+      "aliases": [
+        "AWS Lambda",
+        "serverless architecture"
+      ],
+      "question": "Have you built production features on a serverless architecture (e.g. Lambda)?"
+    },
+    {
+      "id": "nosql-databases",
+      "name": "NoSQL Databases",
+      "category": "Databases",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "MongoDB",
+        "DynamoDB",
+        "document databases"
+      ],
+      "question": "Have you worked with a NoSQL database such as MongoDB or DynamoDB?"
+    },
+    {
+      "id": "data-structures-algorithms",
+      "name": "Data Structures & Algorithms",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 20,
+      "aliases": [
+        "DSA",
+        "algorithmic problem solving"
+      ],
+      "question": "Are you comfortable solving problems involving core data structures and algorithms?"
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "category": "Databases",
+      "weight": 2,
+      "frequency_pct": 18,
+      "aliases": [
+        "MariaDB"
+      ],
+      "question": "Have you built or maintained production systems on MySQL?"
+    },
+    {
+      "id": "feature-flags",
+      "name": "Feature Flags",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 18,
+      "aliases": [
+        "LaunchDarkly",
+        "feature toggles"
+      ],
+      "question": "Have you shipped features behind feature flags for gradual rollout?"
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility (a11y)",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 18,
+      "aliases": [
+        "WCAG",
+        "a11y",
+        "screen-reader support"
+      ],
+      "question": "Have you implemented or audited a web application for accessibility (WCAG/a11y)?"
+    },
+    {
+      "id": "terraform",
+      "name": "Terraform",
+      "category": "Cloud & Infra",
+      "weight": 1,
+      "frequency_pct": 12,
+      "aliases": [
+        "Infrastructure as Code",
+        "IaC"
+      ],
+      "question": "Have you provisioned cloud infrastructure using Terraform?"
+    },
+    {
+      "id": "linux",
+      "name": "Linux",
+      "category": "Tools",
+      "weight": 1,
+      "frequency_pct": 12,
+      "aliases": [
+        "Unix",
+        "shell scripting"
+      ],
+      "question": "Are you comfortable operating and troubleshooting in a Linux environment?"
+    },
+    {
+      "id": "redis",
+      "name": "Redis / Caching",
+      "category": "Databases",
+      "weight": 1,
+      "frequency_pct": 12,
+      "aliases": [
+        "Redis",
+        "in-memory caching"
+      ],
+      "question": "Have you used Redis or a similar cache to improve application performance?"
+    }
+  ],
+  "ats_keywords": [
+    "full-stack development",
+    "software development lifecycle (SDLC)",
+    "cross-functional collaboration",
+    "distributed systems",
+    "service-oriented architecture",
+    "scalable architecture",
+    "cloud-native applications",
+    "on-call rotation",
+    "technical design docs",
+    "state management",
+    "component-driven architecture",
+    "observability",
+    "incident response",
+    "post-mortems",
+    "backend-for-frontend (BFF)",
+    "high-growth startup",
+    "production support",
+    "code reviews",
+    "entrepreneurial mindset",
+    "comfort with ambiguity"
+  ],
+  "sources": [
+    "https://job-boards.greenhouse.io/stripe/jobs/8062305",
+    "https://job-boards.greenhouse.io/stripe/jobs/8226261",
+    "https://job-boards.greenhouse.io/avepoint/jobs/6358379",
+    "https://job-boards.greenhouse.io/stripe/jobs/8142764",
+    "https://job-boards.greenhouse.io/ripple/jobs/7896217",
+    "https://job-boards.greenhouse.io/cookunity/jobs/7786216003",
+    "https://job-boards.greenhouse.io/airia/jobs/5130475007",
+    "https://job-boards.greenhouse.io/calendly/jobs/8817389002",
+    "https://job-boards.greenhouse.io/stripe/jobs/8118929",
+    "https://job-boards.greenhouse.io/stackadapt/jobs/4261506009",
+    "https://jobs.lever.co/oxylabs/98f7c566-a10a-45f0-bdda-2df31ae904cb",
+    "https://jobs.lever.co/teamsnap/58d0ad09-5a31-47c2-8cd0-251815b207d9",
+    "https://jobs.lever.co/cscgeneration-2/d0df490d-99cd-4795-98aa-65ec290e95e0",
+    "https://jobs.lever.co/wise-integration/bb230a2c-4344-4d17-b8df-8b6988c2032a",
+    "https://jobs.lever.co/raya/44b34caa-4959-408f-bedf-df398039502a",
+    "https://jobs.lever.co/brillio-2/9a0d6ef9-fbba-49ab-b62f-e2a76bf2d562",
+    "https://jobs.lever.co/badge-group/06cc0333-dcc2-4c2e-8a66-46c93cfd3f8e",
+    "https://jobs.lever.co/binance/fdee019b-d17e-4655-99c4-b8d31d8e61c5",
+    "https://jobs.lever.co/spear-ai/a5fa5627-f9b5-40da-8226-32bffa0f5e37",
+    "https://jobs.lever.co/teleo/1e86b394-8054-4651-ba25-58765e935efb",
+    "https://jobs.ashbyhq.com/macroscope/984d0037-90d9-44ea-8bb9-371f0e5dc615",
+    "https://jobs.ashbyhq.com/shoponpickle/0af670bf-f7d5-4341-914f-849eb3a3e272",
+    "https://jobs.ashbyhq.com/kindred/6070b239-54da-4e17-8f46-880a70629586",
+    "https://jobs.ashbyhq.com/super.com/a549e814-1daf-4e7a-8e24-ee9b75774dc5",
+    "https://jobs.ashbyhq.com/ciridae/54aa828c-83cb-455e-b9e8-0d8005631503",
+    "https://jobs.ashbyhq.com/odyssey/5158a3e1-ddde-4253-a895-a82a9ab2e2d4",
+    "https://jobs.ashbyhq.com/april/0752b569-e87a-43e1-aa07-def486bd79e1",
+    "https://jobs.ashbyhq.com/exa/98a8bab6-4cbf-4d39-a5a7-0867addc4086",
+    "https://jobs.ashbyhq.com/nash/9024ea9d-648a-4c92-8678-01b2b5357d1e",
+    "https://jobs.ashbyhq.com/toggl/a4f3e1f5-753b-4af9-b068-86a09a164cd2"
+  ]
+}
