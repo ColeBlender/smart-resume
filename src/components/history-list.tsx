@@ -34,7 +34,7 @@ export function HistoryList({ rows }: { rows: HistoryRow[] }) {
                   </ItemDescription>
                 </ItemContent>
                 <ItemActions>
-                  <DownloadPdfButton markdown={t.result_md} company={t.company} />
+                  <DownloadPdfButton markdown={t.result_md} company={t.company} title={t.role_title} />
                 </ItemActions>
               </Item>
             ))}

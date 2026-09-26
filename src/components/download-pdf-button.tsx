@@ -9,22 +9,24 @@ import { resumeFileName } from "@/lib/resume-file-name";
 export function DownloadPdfButton({
   markdown,
   company,
+  title,
   size = "default",
   showFileName = false,
 }: {
   markdown: string;
   company: string | null;
+  title?: string | null;
   size?: "default" | "lg" | "xl";
   showFileName?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
-  const fileName = resumeFileName(markdown, company);
+  const fileName = resumeFileName(markdown, company, title);
 
   async function download() {
     setBusy(true);
     try {
       const { downloadResumePdf } = await import("@/lib/resume-pdf");
-      await downloadResumePdf(markdown, company);
+      await downloadResumePdf(markdown, company, title);
     } catch (e) {
       console.error(e);
       toast.error("Couldn't build the PDF. Try again.");

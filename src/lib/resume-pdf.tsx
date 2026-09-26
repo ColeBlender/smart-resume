@@ -85,8 +85,8 @@ function ResumeDocument({ markdown, title }: { markdown: string; title: string }
   );
 }
 
-export async function downloadResumePdf(markdown: string, company: string | null) {
-  const fileName = resumeFileName(markdown, company);
+export async function downloadResumePdf(markdown: string, company: string | null, title?: string | null) {
+  const fileName = resumeFileName(markdown, company, title);
   const blob = await pdf(<ResumeDocument markdown={markdown} title={fileName.replace(/\.pdf$/, "")} />).toBlob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

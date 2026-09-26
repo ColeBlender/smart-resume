@@ -33,7 +33,7 @@ export function ResumeReadyDialog({ resume, onClose }: { resume: ReadyResume | n
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="justify-center pt-4 pb-2 sm:justify-center">
-              <DownloadPdfButton markdown={resume.markdown} company={resume.company} size="xl" showFileName />
+              <DownloadPdfButton markdown={resume.markdown} company={resume.company} title={resume.title} size="xl" showFileName />
             </DialogFooter>
           </>
         )}
