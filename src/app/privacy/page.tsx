@@ -20,7 +20,7 @@ export default function Privacy() {
                 We store the resume you paste, your skill answers, and the job descriptions and tailored resumes you
                 create, in a Supabase database. Row-level security means only your account can read them.
               </li>
-              <li>Your resume and job descriptions are sent to Anthropic&apos;s Claude API to generate and score tailored resumes.</li>
+              <li>Your resume and job descriptions are sent to Anthropic&apos;s Claude API to generate tailored resumes.</li>
               <li>We don&apos;t sell or share your data, and there are no ads or trackers.</li>
               <li>To have your account and data deleted, email coleblender@gmail.com.</li>
             </ul>

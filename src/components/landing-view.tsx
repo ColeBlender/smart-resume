@@ -19,7 +19,7 @@ const STEPS = [
   {
     icon: ShieldCheck,
     title: "Paste any job",
-    body: "Get a tailored resume, a screener score and your gaps. Nothing you haven't confirmed ever makes it in.",
+    body: "Get a tailored resume as a PDF in about a minute. Nothing you haven't confirmed ever makes it in.",
   },
 ];
 

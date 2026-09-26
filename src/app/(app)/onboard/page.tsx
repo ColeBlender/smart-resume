@@ -9,16 +9,15 @@ import { extractResume, finishOnboarding, prefillSkills } from "./actions";
 // Resume upload (PDF via Claude) and skill pre-rating can take a little while.
 export const maxDuration = 120;
 
-export default async function OnboardPage({ searchParams }: PageProps<"/onboard">) {
+export default async function OnboardPage() {
   const { supabase, user } = await requireUser();
-  const { redo } = await searchParams;
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("role_pack_id, base_resume, onboarded_at, roles")
     .eq("user_id", user.id)
     .maybeSingle();
-  if (profile?.onboarded_at && !redo) redirect("/dashboard");
+  if (profile?.onboarded_at) redirect("/dashboard");
   const skills = await loadSkillProfile(supabase);
 
   return (

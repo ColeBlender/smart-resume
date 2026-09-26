@@ -2,7 +2,7 @@
 
 Tailor a software engineer's resume to any job description **without ever inventing a skill.**
 
-You confirm what you actually know once (yes / some / no against the skills real postings ask for). Every tailored resume is fenced to that list plus your own base resume, and a deterministic honesty guard catches anything Claude tries to sneak in.
+You rate what you actually know once (1 to 5, against the skills real job postings ask for) and say which jobs you used each skill at. Every tailored resume is fenced to that, plus your own resume, and a deterministic honesty guard catches anything Claude tries to sneak in.
 
 ## How it works
 
@@ -21,7 +21,9 @@ You confirm what you actually know once (yes / some / no against the skills real
 | `src/lib/claude.ts` | Every Claude call (PDF transcription, skill pre-rating + job history, job analysis, resume builder), all with structured outputs. |
 | `src/app/dashboard/actions.ts` | The pipeline: analyze → ask about unknown skills → build → honesty guard → rebuild if needed → save. |
 | `data/role-packs/*.json` | Six role packs. Skills and weights come from 19-34 real job postings per role (weight = how often postings list the skill). Sources are in each file. |
-| `supabase/migrations/0001_init.sql` | Schema. Row-level security on every table: users only ever see their own rows. |
+| `supabase/migrations/` | Schema. Row-level security on every table: users only ever see their own rows. |
+| `src/lib/resume-pdf.tsx` | Markdown resume to PDF, built in the browser and loaded on demand. |
+| `src/app/preview/` | The `/preview` gallery: every screen and state with fake data. |
 
 ## Run locally
 
@@ -40,4 +42,4 @@ In Supabase → Authentication → URL Configuration, add `http://localhost:3000
 
 ## Stack
 
-Next.js 16 (App Router, server actions) · TypeScript · Tailwind v4 · Supabase (Postgres, Auth, RLS) · Claude API (`claude-opus-5`, structured outputs) · Vercel · Vitest
+Next.js 16 (App Router, server actions) · TypeScript · Tailwind v4 · shadcn/ui · Supabase (Postgres, Auth, RLS) · Claude API (`claude-opus-5`, structured outputs) · react-pdf · Vercel · Vitest
