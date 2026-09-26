@@ -1,0 +1,406 @@
+{
+  "id": "backend",
+  "title": "Backend Engineer",
+  "summary": "Designs, builds, and operates the server-side systems, APIs, and data infrastructure that power an application.",
+  "postings_sampled": 23,
+  "skills": [
+    {
+      "id": "scalability",
+      "name": "Scalability & High Availability",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 65,
+      "aliases": [
+        "high availability",
+        "high-throughput systems"
+      ],
+      "question": "Have you designed backend systems for high scalability or high availability?"
+    },
+    {
+      "id": "system-design",
+      "name": "System Design",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 57,
+      "aliases": [
+        "software architecture"
+      ],
+      "question": "Have you led the architecture design for a significant backend system?"
+    },
+    {
+      "id": "observability",
+      "name": "Observability & Monitoring",
+      "category": "Cloud & Infra",
+      "weight": 4,
+      "frequency_pct": 57,
+      "aliases": [
+        "monitoring",
+        "logging",
+        "Datadog",
+        "Prometheus",
+        "Grafana"
+      ],
+      "question": "Have you set up monitoring, logging, or observability tooling for a production service?"
+    },
+    {
+      "id": "go",
+      "name": "Go",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 48,
+      "aliases": [
+        "Golang"
+      ],
+      "question": "Do you write production backend services in Go?"
+    },
+    {
+      "id": "python",
+      "name": "Python",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [],
+      "question": "Do you write production backend services in Python?"
+    },
+    {
+      "id": "aws",
+      "name": "Cloud Platforms (AWS/GCP/Azure)",
+      "category": "Cloud & Infra",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [
+        "Amazon Web Services",
+        "GCP",
+        "Azure"
+      ],
+      "question": "Have you deployed and operated backend services on a cloud provider (AWS/GCP/Azure)?"
+    },
+    {
+      "id": "distributed-systems",
+      "name": "Distributed Systems",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 35,
+      "aliases": [],
+      "question": "Have you built or operated distributed systems?"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 30,
+      "aliases": [
+        "TS"
+      ],
+      "question": "Do you write TypeScript for backend services?"
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "category": "Databases",
+      "weight": 3,
+      "frequency_pct": 30,
+      "aliases": [
+        "Postgres",
+        "psql"
+      ],
+      "question": "Have you built or maintained production systems on PostgreSQL?"
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "containers",
+        "containerization"
+      ],
+      "question": "Have you containerized services with Docker?"
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "k8s"
+      ],
+      "question": "Have you deployed or operated services on Kubernetes?"
+    },
+    {
+      "id": "rest-apis",
+      "name": "REST APIs",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "RESTful APIs"
+      ],
+      "question": "Have you designed and built REST APIs?"
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "category": "Databases",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [],
+      "question": "Are you proficient writing SQL queries?"
+    },
+    {
+      "id": "terraform",
+      "name": "Terraform",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "infrastructure as code",
+        "IaC"
+      ],
+      "question": "Have you managed infrastructure as code with Terraform?"
+    },
+    {
+      "id": "event-driven",
+      "name": "Event-Driven Architecture",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "event sourcing",
+        "event-driven architecture"
+      ],
+      "question": "Have you built event-driven backend systems?"
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "category": "Tools",
+      "weight": 2,
+      "frequency_pct": 22,
+      "aliases": [
+        "GitHub",
+        "GitLab",
+        "version control"
+      ],
+      "question": "Are you comfortable with Git-based version control workflows?"
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 17,
+      "aliases": [
+        "continuous integration",
+        "continuous deployment"
+      ],
+      "question": "Have you built or maintained CI/CD pipelines?"
+    },
+    {
+      "id": "security",
+      "name": "Security & Auth",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 17,
+      "aliases": [
+        "authentication",
+        "authorization",
+        "OAuth",
+        "encryption"
+      ],
+      "question": "Have you implemented authentication, authorization, or other security best practices in a backend service?"
+    },
+    {
+      "id": "agile",
+      "name": "Agile/Scrum",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 17,
+      "aliases": [
+        "Scrum",
+        "sprint planning"
+      ],
+      "question": "Have you worked in Agile/Scrum development teams?"
+    },
+    {
+      "id": "api-design",
+      "name": "API Design",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 17,
+      "aliases": [
+        "API development"
+      ],
+      "question": "Have you designed APIs used by other teams or external clients?"
+    },
+    {
+      "id": "ai-ml",
+      "name": "AI/ML Integration",
+      "category": "AI & Data",
+      "weight": 2,
+      "frequency_pct": 17,
+      "aliases": [
+        "machine learning",
+        "LLM integration",
+        "AI/ML"
+      ],
+      "question": "Have you built backend systems that integrate AI/ML models or LLMs?"
+    },
+    {
+      "id": "java",
+      "name": "Java",
+      "category": "Languages",
+      "weight": 1,
+      "frequency_pct": 13,
+      "aliases": [],
+      "question": "Do you write production backend services in Java?"
+    },
+    {
+      "id": "message-queues",
+      "name": "Message Queues",
+      "category": "Cloud & Infra",
+      "weight": 1,
+      "frequency_pct": 13,
+      "aliases": [
+        "Kafka",
+        "RabbitMQ",
+        "SQS",
+        "pub/sub"
+      ],
+      "question": "Have you used a message queue like Kafka or RabbitMQ in production?"
+    },
+    {
+      "id": "testing",
+      "name": "Testing",
+      "category": "Testing & Quality",
+      "weight": 1,
+      "frequency_pct": 13,
+      "aliases": [
+        "unit testing",
+        "integration testing",
+        "pytest"
+      ],
+      "question": "Have you written unit or integration tests for backend services?"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "category": "Languages",
+      "weight": 1,
+      "frequency_pct": 9,
+      "aliases": [
+        "Node.js"
+      ],
+      "question": "Do you write production backend services in Node.js?"
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "category": "Databases",
+      "weight": 1,
+      "frequency_pct": 9,
+      "aliases": [],
+      "question": "Have you used Redis for caching or data storage?"
+    },
+    {
+      "id": "microservices",
+      "name": "Microservices",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 9,
+      "aliases": [],
+      "question": "Have you designed or operated microservices architectures?"
+    },
+    {
+      "id": "caching",
+      "name": "Caching",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 9,
+      "aliases": [
+        "cache invalidation"
+      ],
+      "question": "Have you implemented caching strategies for a backend system?"
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "category": "Databases",
+      "weight": 1,
+      "frequency_pct": 4,
+      "aliases": [
+        "MariaDB"
+      ],
+      "question": "Have you built or maintained production systems on MySQL?"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 4,
+      "aliases": [],
+      "question": "Have you designed or implemented GraphQL APIs?"
+    },
+    {
+      "id": "grpc",
+      "name": "gRPC",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 4,
+      "aliases": [
+        "protobuf"
+      ],
+      "question": "Have you built services that communicate over gRPC?"
+    }
+  ],
+  "ats_keywords": [
+    "API development",
+    "data modeling",
+    "database schema design",
+    "query optimization",
+    "horizontal scaling",
+    "load balancing",
+    "fault tolerance",
+    "incident response / on-call",
+    "code review",
+    "technical design documents",
+    "cross-functional collaboration",
+    "mentoring engineers",
+    "SLAs / SLOs",
+    "capacity planning",
+    "data pipelines",
+    "zero-downtime deployments",
+    "version control workflows",
+    "sprint planning",
+    "production debugging"
+  ],
+  "sources": [
+    "https://boards.greenhouse.io/launchdarkly/jobs/7860487003?utm_source=Lead+Edge+Capital+job+board&utm_medium=getro.com&gh_src=Lead+Edge+Capital+job+board",
+    "https://boards.greenhouse.io/gitlab/jobs/8689236002",
+    "https://boards.greenhouse.io/gongio/jobs/4700783006",
+    "https://boards.greenhouse.io/sonatus/jobs/5226550007",
+    "https://boards.greenhouse.io/orkes/jobs/5378021008",
+    "https://boards.greenhouse.io/tailscale/jobs/4733183005",
+    "https://boards.greenhouse.io/gitlab/jobs/8770702002",
+    "https://boards.greenhouse.io/moniepoint/jobs/4983673101",
+    "https://jobs.ashbyhq.com/zapier/1767482d-de23-460c-80eb-6d0a3caa72ab",
+    "https://jobs.ashbyhq.com/wynd-labs/900e79ba-5668-4a43-9065-3f4bf7db6aa4",
+    "https://jobs.ashbyhq.com/atticus/7663356d-e896-48d0-b884-1fe685c2509e",
+    "https://jobs.ashbyhq.com/runway-ml/8489a08a-f0cf-4418-968c-c7c803d538bc",
+    "https://jobs.ashbyhq.com/popl/2bc28d53-699a-4796-8b0c-dce2794b0d4c",
+    "https://jobs.ashbyhq.com/socure/0fa30965-200d-435b-ad30-7f778b9f8ec7",
+    "https://jobs.ashbyhq.com/Nash/5078366e-db73-45a4-b9cb-23162d3bc28b",
+    "https://jobs.ashbyhq.com/chariot/aae6b3fa-c17d-45d2-aff3-f5d8e72cd4f6",
+    "https://jobs.lever.co/AviveSolutions/32413476-fd16-46e0-876c-dd7b0999e436",
+    "https://jobs.lever.co/funxyz/a6764645-a33f-48e0-a82d-3496f9c8573d",
+    "https://jobs.lever.co/wealthfront/f5a0963a-ca1a-4140-b9e6-dbf6072093fe",
+    "https://jobs.lever.co/xsolla/8298ae62-cc3a-4110-be98-e27ade43c33f",
+    "https://jobs.lever.co/ro/efbeeea0-5007-4d21-9bbd-e889a5148138",
+    "https://jobs.lever.co/mujininc/623399ba-3b39-49d0-b4b9-09f9dc23ff77",
+    "https://jobs.oneseventech.com/senior-backend-engineer-python-or-nodejs-aws-301385/"
+  ]
+}

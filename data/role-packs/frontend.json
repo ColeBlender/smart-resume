@@ -1,0 +1,415 @@
+{
+  "id": "frontend",
+  "title": "Frontend Engineer",
+  "summary": "Builds and maintains the user-facing layer of web applications, translating designs into performant, accessible, and maintainable UI code.",
+  "postings_sampled": 19,
+  "skills": [
+    {
+      "id": "react",
+      "name": "React",
+      "category": "Frameworks",
+      "weight": 5,
+      "frequency_pct": 89,
+      "aliases": [
+        "React.js",
+        "ReactJS"
+      ],
+      "question": "Have you built production applications with React?"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "category": "Languages",
+      "weight": 4,
+      "frequency_pct": 68,
+      "aliases": [
+        "TS"
+      ],
+      "question": "Do you write TypeScript in production codebases?"
+    },
+    {
+      "id": "system-design",
+      "name": "System Design",
+      "category": "Practices",
+      "weight": 4,
+      "frequency_pct": 63,
+      "aliases": [
+        "software architecture",
+        "frontend architecture"
+      ],
+      "question": "Have you designed the architecture for a frontend application or major feature?"
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "category": "Languages",
+      "weight": 4,
+      "frequency_pct": 53,
+      "aliases": [
+        "JS",
+        "ECMAScript"
+      ],
+      "question": "Are you proficient in modern JavaScript (ES6+)?"
+    },
+    {
+      "id": "html-css",
+      "name": "HTML/CSS",
+      "category": "Languages",
+      "weight": 3,
+      "frequency_pct": 42,
+      "aliases": [
+        "HTML5",
+        "CSS3"
+      ],
+      "question": "Are you proficient in semantic HTML and modern CSS?"
+    },
+    {
+      "id": "web-performance",
+      "name": "Web Performance",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 37,
+      "aliases": [
+        "Core Web Vitals",
+        "performance optimization",
+        "Lighthouse"
+      ],
+      "question": "Have you optimized a web app's load time or Core Web Vitals?"
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 37,
+      "aliases": [
+        "a11y",
+        "WCAG"
+      ],
+      "question": "Have you implemented WCAG-compliant accessible interfaces?"
+    },
+    {
+      "id": "responsive-design",
+      "name": "Responsive Design",
+      "category": "Practices",
+      "weight": 3,
+      "frequency_pct": 37,
+      "aliases": [
+        "mobile-responsive layouts"
+      ],
+      "question": "Have you built responsive layouts that work across screen sizes?"
+    },
+    {
+      "id": "state-management",
+      "name": "State Management",
+      "category": "Frameworks",
+      "weight": 3,
+      "frequency_pct": 32,
+      "aliases": [
+        "Redux",
+        "Zustand",
+        "MobX",
+        "Recoil"
+      ],
+      "question": "Have you used a state-management library like Redux or Zustand?"
+    },
+    {
+      "id": "testing",
+      "name": "Testing",
+      "category": "Testing & Quality",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "Jest",
+        "Cypress",
+        "Playwright",
+        "Testing Library"
+      ],
+      "question": "Have you written unit or end-to-end tests for frontend code?"
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "category": "Tools",
+      "weight": 2,
+      "frequency_pct": 26,
+      "aliases": [
+        "GitHub",
+        "GitLab",
+        "version control"
+      ],
+      "question": "Are you comfortable with Git-based version control workflows?"
+    },
+    {
+      "id": "vue",
+      "name": "Vue.js",
+      "category": "Frameworks",
+      "weight": 2,
+      "frequency_pct": 21,
+      "aliases": [
+        "Vue.js",
+        "VueJS"
+      ],
+      "question": "Have you built production applications with Vue.js?"
+    },
+    {
+      "id": "design-systems",
+      "name": "Design Systems",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 21,
+      "aliases": [
+        "component libraries"
+      ],
+      "question": "Have you built or maintained a design system or shared component library?"
+    },
+    {
+      "id": "component-architecture",
+      "name": "Component Architecture",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 21,
+      "aliases": [
+        "reusable components"
+      ],
+      "question": "Have you architected reusable, composable UI components?"
+    },
+    {
+      "id": "ai-ml",
+      "name": "AI/ML Integration",
+      "category": "AI & Data",
+      "weight": 2,
+      "frequency_pct": 21,
+      "aliases": [
+        "AI features",
+        "LLM integration"
+      ],
+      "question": "Have you built frontend features that integrate AI/LLM capabilities?"
+    },
+    {
+      "id": "build-tools",
+      "name": "Build Tools",
+      "category": "Tools",
+      "weight": 2,
+      "frequency_pct": 16,
+      "aliases": [
+        "Webpack",
+        "Vite",
+        "Babel"
+      ],
+      "question": "Have you configured frontend build tooling like Webpack or Vite?"
+    },
+    {
+      "id": "cross-browser",
+      "name": "Cross-Browser Compatibility",
+      "category": "Practices",
+      "weight": 2,
+      "frequency_pct": 16,
+      "aliases": [
+        "browser compatibility"
+      ],
+      "question": "Have you debugged and fixed cross-browser compatibility issues?"
+    },
+    {
+      "id": "react-native",
+      "name": "React Native",
+      "category": "Mobile",
+      "weight": 2,
+      "frequency_pct": 16,
+      "aliases": [
+        "RN"
+      ],
+      "question": "Have you built mobile apps with React Native?"
+    },
+    {
+      "id": "aws",
+      "name": "Cloud Platforms (AWS/GCP/Azure)",
+      "category": "Cloud & Infra",
+      "weight": 2,
+      "frequency_pct": 16,
+      "aliases": [
+        "Amazon Web Services",
+        "GCP",
+        "Azure"
+      ],
+      "question": "Have you deployed or configured frontend infrastructure on a cloud provider (AWS/GCP/Azure)?"
+    },
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "category": "Frameworks",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "Next.js"
+      ],
+      "question": "Have you built applications with Next.js?"
+    },
+    {
+      "id": "angular",
+      "name": "Angular",
+      "category": "Frameworks",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "AngularJS",
+        "Angular 2+"
+      ],
+      "question": "Have you built production applications with Angular?"
+    },
+    {
+      "id": "tailwind-css",
+      "name": "Tailwind CSS",
+      "category": "Frameworks",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "Tailwind"
+      ],
+      "question": "Have you styled applications using Tailwind CSS?"
+    },
+    {
+      "id": "rest-apis",
+      "name": "REST APIs",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "RESTful APIs"
+      ],
+      "question": "Have you integrated frontend apps with REST APIs?"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "GraphQL queries"
+      ],
+      "question": "Have you consumed GraphQL APIs from a frontend client?"
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "continuous integration",
+        "continuous deployment"
+      ],
+      "question": "Have you worked with CI/CD pipelines for frontend deployment?"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "category": "Languages",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "Node.js"
+      ],
+      "question": "Have you used Node.js for frontend tooling or SSR?"
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "category": "Tools",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "Sketch"
+      ],
+      "question": "Have you collaborated directly with designers using Figma?"
+    },
+    {
+      "id": "ai-tools",
+      "name": "AI Coding Tools",
+      "category": "AI & Data",
+      "weight": 1,
+      "frequency_pct": 11,
+      "aliases": [
+        "GitHub Copilot",
+        "AI coding assistants"
+      ],
+      "question": "Do you use AI coding assistants like Copilot in your daily workflow?"
+    },
+    {
+      "id": "storybook",
+      "name": "Storybook",
+      "category": "Tools",
+      "weight": 1,
+      "frequency_pct": 5,
+      "aliases": [],
+      "question": "Have you documented components using Storybook?"
+    },
+    {
+      "id": "agile",
+      "name": "Agile/Scrum",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 5,
+      "aliases": [
+        "Scrum",
+        "sprint planning"
+      ],
+      "question": "Have you worked in Agile/Scrum development teams?"
+    },
+    {
+      "id": "websockets",
+      "name": "WebSockets",
+      "category": "Practices",
+      "weight": 1,
+      "frequency_pct": 5,
+      "aliases": [
+        "real-time updates",
+        "socket.io"
+      ],
+      "question": "Have you implemented real-time features using WebSockets?"
+    }
+  ],
+  "ats_keywords": [
+    "user interface (UI) development",
+    "user experience (UX) collaboration",
+    "pixel-perfect implementation",
+    "single-page applications (SPA)",
+    "progressive web apps (PWA)",
+    "mobile-first design",
+    "cross-functional collaboration",
+    "code review",
+    "component library development",
+    "design tokens",
+    "API integration",
+    "version control workflows",
+    "sprint planning",
+    "technical documentation",
+    "browser compatibility testing",
+    "performance budgets",
+    "SEO fundamentals",
+    "mentoring engineers",
+    "developer experience (DX)"
+  ],
+  "sources": [
+    "https://boards.greenhouse.io/brex/jobs/8815466002",
+    "https://boards.greenhouse.io/crunchyroll/jobs/7843995?gh_jid=7843995",
+    "https://boards.greenhouse.io/goodsservices/jobs/7994858003",
+    "https://boards.greenhouse.io/grafanalabs/jobs/6194871004",
+    "https://boards.greenhouse.io/coupanginternal/jobs/8093379?gh_jid=8093379&utm_source=freehire.me",
+    "https://jobs.ashbyhq.com/retell-ai/26e3aa9d-f22d-4870-8db5-bb488c207559",
+    "https://jobs.ashbyhq.com/squads/0d1e98d2-ac92-455d-a6a2-ed537133de00",
+    "https://jobs.ashbyhq.com/LAI/d6429830-2675-470e-af10-7c943ad31eee",
+    "https://jobs.ashbyhq.com/archy/c63e42d7-5b20-46a8-8112-b2584ec78392",
+    "https://jobs.ashbyhq.com/vetcove/7c0557ca-fadf-4e6d-8769-c39f87ee5f0d",
+    "https://jobs.ashbyhq.com/almedia/d4632994-1148-45c0-b7af-25a3e9751dc6",
+    "https://jobs.ashbyhq.com/whippy/da02ad44-9668-4f93-94e3-bf1a6e09ad8b",
+    "https://jobs.ashbyhq.com/pebl/ad97a861-ecb5-45a4-aa22-6774499a8095",
+    "https://jobs.lever.co/drivetrain/5ebd7e09-3f2b-4c53-a0be-0649bdd84842",
+    "https://jobs.lever.co/xsolla/aafd0eab-e98c-4e66-a556-90b677a87bf8",
+    "https://jobs.lever.co/pigment/cb04a184-0756-461c-b4b3-58f779a82b09?utm_source=jobs.cobloom.com",
+    "https://jobs.lever.co/hive/49c64df4-209b-4334-8f98-7e1dc6440ed1",
+    "https://jobs.lever.co/vana/678f553e-1409-458a-afcf-797922571b1d?lever-source=employbl",
+    "https://jobs.lever.co/netomi/4fbdaf57-644a-47a6-9248-88fc0bf4a2dd"
+  ]
+}
