@@ -43,9 +43,11 @@ export default async function TailoringPage({ params }: PageProps<"/tailor/[id]"
         </p>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
-          <article className="resume h-fit rounded-xl border bg-white p-8 shadow-sm">
-            <Markdown>{t.result_md}</Markdown>
-          </article>
+          <Card className="h-fit bg-white">
+            <CardContent className="resume">
+              <Markdown>{t.result_md}</Markdown>
+            </CardContent>
+          </Card>
 
           <aside className="space-y-4">
             <Card>

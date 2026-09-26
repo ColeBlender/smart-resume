@@ -1,9 +1,11 @@
 import { ClipboardCheck, FileSearch, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { GoogleButton } from "@/components/google-button";
 import { Header } from "@/components/header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROLE_PACKS } from "@/lib/role-packs";
 import { createClient } from "@/lib/supabase/server";
@@ -81,10 +83,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           ))}
         </section>
       </main>
-      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        <a href="/privacy" className="hover:text-foreground">
-          Privacy
-        </a>
+      <footer className="flex justify-center border-t py-4">
+        <Button variant="link" size="sm" asChild>
+          <Link href="/privacy">Privacy</Link>
+        </Button>
       </footer>
     </>
   );

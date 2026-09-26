@@ -1,12 +1,12 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { RolePack } from "@/lib/role-packs";
@@ -84,20 +84,17 @@ export function OnboardForm(props: {
           {byCategory.map(([category, skills]) => (
             <div key={category}>
               <h3 className="mb-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">{category}</h3>
-              <div className="rounded-lg border">
-                {skills.map((s, i) => (
-                  <div key={s.id}>
-                    {i > 0 && <Separator />}
-                    <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center">
-                      <div className="flex-1">
-                        <div className="text-sm font-medium">
-                          {s.name}
-                          <span className="ml-2 text-xs font-normal text-muted-foreground">
-                            {s.frequency_pct}% of postings
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{s.question}</p>
-                      </div>
+              <ItemGroup className="gap-2">
+                {skills.map((s) => (
+                  <Item key={s.id} variant="outline">
+                    <ItemContent className="min-w-60">
+                      <ItemTitle>
+                        {s.name}
+                        <span className="text-xs font-normal text-muted-foreground">{s.frequency_pct}% of postings</span>
+                      </ItemTitle>
+                      <ItemDescription>{s.question}</ItemDescription>
+                    </ItemContent>
+                    <ItemActions>
                       <ToggleGroup
                         type="single"
                         variant="outline"
@@ -112,10 +109,10 @@ export function OnboardForm(props: {
                           </ToggleGroupItem>
                         ))}
                       </ToggleGroup>
-                    </div>
-                  </div>
+                    </ItemActions>
+                  </Item>
                 ))}
-              </div>
+              </ItemGroup>
             </div>
           ))}
         </CardContent>
@@ -139,7 +136,7 @@ export function OnboardForm(props: {
 
       <div className="flex justify-end">
         <Button size="lg" onClick={submit} disabled={pending}>
-          {pending && <Loader2 className="animate-spin" />}
+          {pending && <Spinner />}
           {pending ? "Saving…" : "Save profile"}
         </Button>
       </div>

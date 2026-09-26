@@ -1,4 +1,4 @@
-import { AlertTriangle, Plus } from "lucide-react";
+import { AlertTriangle, FileText, Plus } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { ScoreRing } from "@/components/score-ring";
@@ -6,6 +6,8 @@ import { SkillChips } from "@/components/skill-chips";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@/components/ui/item";
 import { requireProfile } from "@/lib/profile";
 import { weightedCoverage } from "@/lib/scoring";
 
@@ -73,33 +75,46 @@ export default async function Dashboard() {
           </CardHeader>
           <CardContent>
             {tailorings?.length ? (
-              <div className="divide-y rounded-lg border">
+              <ItemGroup className="gap-2">
                 {tailorings.map((t) => (
-                  <Link
-                    key={t.id}
-                    href={`/tailor/${t.id}`}
-                    className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/50"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate font-medium">{t.role_title || "Untitled role"}</div>
-                      <div className="truncate text-sm text-muted-foreground">
-                        {t.company || "Unknown company"} · {new Date(t.created_at).toLocaleDateString()}
-                      </div>
-                    </div>
-                    {(t.flagged as unknown[]).length > 0 && (
-                      <Badge variant="destructive">
-                        <AlertTriangle /> Review
-                      </Badge>
-                    )}
-                    <Badge variant="secondary">Screener {t.ai_score ?? "–"}</Badge>
-                    <Badge variant="outline">Coverage {t.coverage_pct}%</Badge>
-                  </Link>
+                  <Item key={t.id} variant="outline" asChild>
+                    <Link href={`/tailor/${t.id}`}>
+                      <ItemContent>
+                        <ItemTitle>{t.role_title || "Untitled role"}</ItemTitle>
+                        <ItemDescription>
+                          {t.company || "Unknown company"} · {new Date(t.created_at).toLocaleDateString()}
+                        </ItemDescription>
+                      </ItemContent>
+                      <ItemActions>
+                        {(t.flagged as unknown[]).length > 0 && (
+                          <Badge variant="destructive">
+                            <AlertTriangle /> Review
+                          </Badge>
+                        )}
+                        <Badge variant="secondary">Screener {t.ai_score ?? "–"}</Badge>
+                        <Badge variant="outline">Coverage {t.coverage_pct}%</Badge>
+                      </ItemActions>
+                    </Link>
+                  </Item>
                 ))}
-              </div>
+              </ItemGroup>
             ) : (
-              <div className="rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">
-                No tailored resumes yet. Paste a job description to make your first one.
-              </div>
+              <Empty className="border">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <FileText />
+                  </EmptyMedia>
+                  <EmptyTitle>No tailored resumes yet</EmptyTitle>
+                  <EmptyDescription>Paste a job description to make your first one.</EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Button asChild>
+                    <Link href="/tailor/new">
+                      <Plus /> Tailor for a new job
+                    </Link>
+                  </Button>
+                </EmptyContent>
+              </Empty>
             )}
           </CardContent>
         </Card>

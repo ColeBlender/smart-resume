@@ -1,4 +1,4 @@
-import { FileText, LogOut, SlidersHorizontal } from "lucide-react";
+import { FileText, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SignOutItem } from "./sign-out-item";
 import { ThemeToggle } from "./theme-toggle";
 
 type HeaderUser = { email?: string; user_metadata?: { avatar_url?: string; full_name?: string } };
@@ -78,13 +79,7 @@ export function Header({ user }: { user?: HeaderUser }) {
                     <SlidersHorizontal /> Skills &amp; resume
                   </Link>
                 </DropdownMenuItem>
-                <form action="/auth/signout" method="post">
-                  <DropdownMenuItem asChild>
-                    <button type="submit" className="w-full">
-                      <LogOut /> Sign out
-                    </button>
-                  </DropdownMenuItem>
-                </form>
+                <SignOutItem />
               </DropdownMenuContent>
             </DropdownMenu>
           )}

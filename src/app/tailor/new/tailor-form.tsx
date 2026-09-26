@@ -1,10 +1,11 @@
 "use client";
 
-import { Loader2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { SkillChips } from "@/components/skill-chips";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,7 +69,7 @@ export function TailorForm({ pack, answers }: { pack: RolePack; answers: Answers
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <Button size="lg" onClick={submit} disabled={pending || jd.trim().length < 200}>
-              {pending ? <Loader2 className="animate-spin" /> : <Sparkles />}
+              {pending ? <Spinner /> : <Sparkles />}
               {pending ? "Working…" : "Tailor my resume"}
             </Button>
             {pending && <span className="text-sm text-muted-foreground">{STEPS[step]}… usually under a minute</span>}

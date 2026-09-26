@@ -1,8 +1,8 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { createClient } from "@/lib/supabase/client";
 
 function GoogleIcon() {
@@ -28,8 +28,8 @@ export function GoogleButton() {
   }
 
   return (
-    <Button size="lg" onClick={signIn} disabled={loading} className="h-11 px-5 text-sm">
-      {loading ? <Loader2 className="animate-spin" /> : <GoogleIcon />}
+    <Button size="lg" variant="outline" onClick={signIn} disabled={loading}>
+      {loading ? <Spinner /> : <GoogleIcon />}
       {loading ? "Redirecting to Google…" : "Continue with Google"}
     </Button>
   );
